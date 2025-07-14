@@ -1,0 +1,136 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { generateFlashcardsAction } from '@/app/actions';
+import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Terminal } from 'lucide-react';
+
+type Flashcard = {
+  term: string;
+  definition: string;
+};
+
+const FlashcardSkeleton = () => (
+    <Carousel className="w-full max-w-xl mx-auto">
+        <CarouselContent>
+            {Array.from({ length: 3 }).map((_, index) => (
+                <CarouselItem key={index}>
+                    <div className="p-1">
+                        <Card className="h-80">
+                            <CardContent className="flex flex-col items-center justify-center p-6 h-full">
+                                <Skeleton className="h-8 w-3/4 mb-4" />
+                                <Skeleton className="h-4 w-1/2" />
+                            </CardContent>
+                        </Card>
+                    </div>
+                </CarouselItem>
+            ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+    </Carousel>
+);
+
+
+const FlashcardComponent = ({ card }: { card: Flashcard }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  return (
+    <div className="p-1 perspective" onClick={() => setIsFlipped(!isFlipped)}>
+      <motion.div
+        className="relative h-80 w-full cursor-pointer preserve-3d"
+        animate={{ rotateY: isFlipped ? 180 : 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        {/* Front of the card */}
+        <div className="absolute w-full h-full backface-hidden">
+          <Card className="h-full bg-accent/20 border-accent">
+            <CardContent className="flex flex-col items-center justify-center p-6 h-full text-center">
+              <p className="text-muted-foreground text-sm mb-4">Term</p>
+              <h3 className="text-2xl font-bold font-headline text-accent-foreground">{card.term}</h3>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Back of the card */}
+        <div className="absolute w-full h-full backface-hidden rotate-y-180">
+          <Card className="h-full bg-card border-border">
+             <CardContent className="flex flex-col items-center justify-center p-6 h-full text-center">
+              <p className="text-muted-foreground text-sm mb-4">Definition</p>
+              <p className="text-md font-code text-foreground">{card.definition}</p>
+            </CardContent>
+          </Card>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+
+export default function FlashcardSection({ chapterContent }: { chapterContent: string }) {
+  const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchFlashcards = async () => {
+      setLoading(true);
+      setError(null);
+      const result = await generateFlashcardsAction(chapterContent);
+
+      if (result.success && result.data) {
+        setFlashcards(result.data);
+      } else {
+        setError(result.error || 'An unknown error occurred.');
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error || "Failed to generate flashcards.",
+        });
+      }
+      setLoading(false);
+    };
+
+    fetchFlashcards();
+  }, [chapterContent, toast]);
+
+  if (loading) {
+    return <FlashcardSkeleton />;
+  }
+
+  if (error) {
+    return (
+        <Alert variant="destructive">
+            <Terminal className="h-4 w-4" />
+            <AlertTitle>Generation Failed</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+        </Alert>
+    )
+  }
+
+  return (
+    <Carousel className="w-full max-w-xl mx-auto" opts={{ loop: true }}>
+      <CarouselContent>
+        {flashcards.map((card, index) => (
+          <CarouselItem key={index}>
+            <FlashcardComponent card={card} />
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+  );
+}
