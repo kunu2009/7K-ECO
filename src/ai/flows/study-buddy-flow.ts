@@ -1,10 +1,9 @@
-'use server';
 /**
  * @fileOverview A conversational AI flow for the Study Buddy chatbot.
  *
  * - chat - A function that handles a streaming chat conversation.
  */
-import { generateText, CoreMessage } from 'ai';
+import { CoreMessage } from 'ai';
 import { google } from '@ai-sdk/google';
 
 export function chat(messages: CoreMessage[]) {
