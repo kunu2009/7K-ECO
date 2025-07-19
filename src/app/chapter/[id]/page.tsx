@@ -39,7 +39,7 @@ export default function ChapterPage({ params }: ChapterPageProps) {
 
   const materials = studyMaterials[chapterId];
   const isReelsActive = activeTab === 'reels';
-  const showInteractiveChart = chapterId === 6; // Only show for Chapter 6: Supply Analysis
+  const showInteractiveChart = chapterId === 5; // Only show for Chapter 5: Supply Analysis
 
   return (
     <div className={cn("min-h-screen bg-background", !isReelsActive && "p-4 md:p-8")}>
@@ -54,7 +54,7 @@ export default function ChapterPage({ params }: ChapterPageProps) {
                 <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
                 <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
                 <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>
-                <TabsTrigger value="must-know"><Star className="w-4 h-4 mr-2"/>Must Know</TabsT rigge</TabsTrigger>
+                <TabsTrigger value="must-know"><Star className="w-4 h-4 mr-2"/>Must Know</TabsTrigger>
                 {showInteractiveChart && (
                    <TabsTrigger value="interactive-chart"><BarChart2 className="w-4 h-4 mr-2"/>Interactive Chart</TabsTrigger>
                 )}
