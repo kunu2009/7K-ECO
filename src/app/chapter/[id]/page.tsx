@@ -1,4 +1,7 @@
 
+"use client";
+
+import { useState } from 'react';
 import { chapters } from '@/data/chapters';
 import { notFound } from 'next/navigation';
 import {
@@ -16,6 +19,7 @@ import ReelsSection from '@/components/ReelsSection';
 import { FileText, Layers, ListChecks, Star, PlayCircle } from 'lucide-react';
 import { studyMaterials } from '@/data/study-materials';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 type ChapterPageProps = {
   params: {
@@ -24,6 +28,7 @@ type ChapterPageProps = {
 };
 
 export default function ChapterPage({ params }: ChapterPageProps) {
+  const [activeTab, setActiveTab] = useState('summary');
   const chapterId = parseInt(params.id, 10);
   const chapter = chapters.find((c) => c.id === chapterId);
 
@@ -32,22 +37,27 @@ export default function ChapterPage({ params }: ChapterPageProps) {
   }
 
   const materials = studyMaterials[chapterId];
+  const isReelsActive = activeTab === 'reels';
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <ChapterHeader title={chapter.title} />
-      <main className="mt-8">
-        <Tabs defaultValue="summary" className="w-full">
-          <ScrollArea className="w-full whitespace-nowrap">
-            <TabsList className="grid w-full grid-cols-5 bg-card/80 backdrop-blur-sm sticky top-0 z-20 sm:w-full">
-              <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
-              <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
-              <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>
-              <TabsTrigger value="must-know"><Star className="w-4 h-4 mr-2"/>Must Know</TabsTrigger>
-              <TabsTrigger value="reels"><PlayCircle className="w-4 h-4 mr-2"/>Reels</TabsTrigger>
-            </TabsList>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+    <div className={cn("min-h-screen bg-background", !isReelsActive && "p-4 md:p-8")}>
+      <div className={cn(isReelsActive && "hidden")}>
+        <ChapterHeader title={chapter.title} />
+      </div>
+      <main className={cn(isReelsActive ? "h-screen" : "mt-8")}>
+        <Tabs defaultValue="summary" onValueChange={setActiveTab} className="w-full h-full flex flex-col">
+          <div className={cn(isReelsActive && "hidden")}>
+            <ScrollArea className="w-full whitespace-nowrap">
+              <TabsList className="grid w-full grid-cols-5 bg-card/80 backdrop-blur-sm sticky top-0 z-20 sm:w-full">
+                <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
+                <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
+                <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>
+                <TabsTrigger value="must-know"><Star className="w-4 h-4 mr-2"/>Must Know</TabsTrigger>
+                <TabsTrigger value="reels"><PlayCircle className="w-4 h-4 mr-2"/>Reels</TabsTrigger>
+              </TabsList>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+          </div>
           <TabsContent value="summary" className="mt-6">
             <SummarySection summary={materials.summary} />
           </TabsContent>
@@ -60,17 +70,11 @@ export default function ChapterPage({ params }: ChapterPageProps) {
           <TabsContent value="must-know" className="mt-6">
             <MustKnowSection mustKnow={materials.mustKnow} />
           </TabsContent>
-          <TabsContent value="reels" className="mt-6">
+          <TabsContent value="reels" className="h-full">
             <ReelsSection reels={materials.reels} />
           </TabsContent>
         </Tabs>
       </main>
     </div>
   );
-}
-
-export async function generateStaticParams() {
-  return chapters.map((chapter) => ({
-    id: chapter.id.toString(),
-  }));
 }

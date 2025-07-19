@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal, PlayCircle } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 type Reel = {
@@ -35,15 +35,8 @@ export default function ReelsSection({ reels }: { reels: Reel[] }) {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto">
-        <h2 className="flex items-center text-2xl font-bold font-headline mb-4">
-            <PlayCircle className="mr-3 text-primary"/> Educational Reels
-        </h2>
-        <p className="text-muted-foreground mb-6">
-            Quick video-style explainers to help you visualize key concepts. Scroll down to learn.
-        </p>
-      
-      <div className="h-[70vh] w-full rounded-xl border-4 border-foreground/10 bg-card overflow-y-auto snap-y snap-mandatory scroll-smooth">
+    <div className="fixed inset-0 bg-black z-50">
+      <div className="h-full w-full max-w-md mx-auto rounded-xl bg-card overflow-y-auto snap-y snap-mandatory scroll-smooth">
         {reels.map((reel, index) => (
             <motion.div
                 key={index}
