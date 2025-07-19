@@ -21,6 +21,7 @@ import { studyMaterials } from '@/data/study-materials';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import InteractiveSupplyDemandChart from '@/components/InteractiveSupplyDemandChart';
+import InteractiveDemandChart from '@/components/InteractiveDemandChart';
 
 type ChapterPageProps = {
   params: {
@@ -39,7 +40,10 @@ export default function ChapterPage({ params }: ChapterPageProps) {
 
   const materials = studyMaterials[chapterId];
   const isReelsActive = activeTab === 'reels';
-  const showInteractiveChart = chapterId === 5; // Only show for Chapter 5: Supply Analysis
+  const showSupplyDemandChart = chapterId === 5;
+  const showDemandChart = chapterId === 3;
+  const showInteractiveCharts = showSupplyDemandChart || showDemandChart;
+
 
   return (
     <div className={cn("min-h-screen bg-background", !isReelsActive && "p-4 md:p-8")}>
@@ -50,12 +54,15 @@ export default function ChapterPage({ params }: ChapterPageProps) {
         <Tabs defaultValue="summary" onValueChange={setActiveTab} className="w-full h-full flex flex-col">
           <div className={cn(isReelsActive && "hidden")}>
             <ScrollArea className="w-full whitespace-nowrap">
-              <TabsList className={cn("grid w-full bg-card/80 backdrop-blur-sm sticky top-0 z-20 sm:w-full", showInteractiveChart ? "grid-cols-6" : "grid-cols-5")}>
+              <TabsList className={cn("grid w-full bg-card/80 backdrop-blur-sm sticky top-0 z-20 sm:w-full", showInteractiveCharts ? "grid-cols-6" : "grid-cols-5")}>
                 <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
                 <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
                 <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>
                 <TabsTrigger value="must-know"><Star className="w-4 h-4 mr-2"/>Must Know</TabsTrigger>
-                {showInteractiveChart && (
+                {showDemandChart && (
+                   <TabsTrigger value="interactive-chart"><BarChart2 className="w-4 h-4 mr-2"/>Interactive Chart</TabsTrigger>
+                )}
+                 {showSupplyDemandChart && (
                    <TabsTrigger value="interactive-chart"><BarChart2 className="w-4 h-4 mr-2"/>Interactive Chart</TabsTrigger>
                 )}
                 <TabsTrigger value="reels"><PlayCircle className="w-4 h-4 mr-2"/>Reels</TabsTrigger>
@@ -75,7 +82,12 @@ export default function ChapterPage({ params }: ChapterPageProps) {
           <TabsContent value="must-know" className="mt-6">
             <MustKnowSection mustKnow={materials.mustKnow} />
           </TabsContent>
-           {showInteractiveChart && (
+           {showDemandChart && (
+            <TabsContent value="interactive-chart" className="mt-6">
+              <InteractiveDemandChart />
+            </TabsContent>
+          )}
+           {showSupplyDemandChart && (
             <TabsContent value="interactive-chart" className="mt-6">
               <InteractiveSupplyDemandChart />
             </TabsContent>
