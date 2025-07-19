@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
+import AppSidebar from "@/components/AppSidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
   title: "EcoLearn",
@@ -23,7 +25,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-background">
-        {children}
+        <SidebarProvider>
+          <div className="flex">
+            <AppSidebar />
+            <main className="flex-1">
+              {children}
+            </main>
+          </div>
+        </SidebarProvider>
         <Toaster />
       </body>
     </html>
