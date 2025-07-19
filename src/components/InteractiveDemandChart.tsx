@@ -24,7 +24,7 @@ export default function InteractiveDemandChart() {
     const currentQuantity = Math.max(0, 110 - (price * 10));
 
     return (
-        <Card>
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>Interactive Demand Curve</CardTitle>
                 <CardDescription>
@@ -34,7 +34,7 @@ export default function InteractiveDemandChart() {
             <CardContent className="space-y-8">
                 <div className="h-96 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={demandData} margin={{ top: 5, right: 30, left: 20, bottom: 20 }}>
+                        <LineChart data={demandData} margin={{ top: 5, right: 20, left: 10, bottom: 20 }}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="quantity" type="number" domain={[0, 110]} name="Quantity Demanded" label={{ value: "Quantity Demanded", position: "insideBottom", offset: -15 }} />
                             <YAxis dataKey="price" type="number" domain={[0, 12]} name="Price" label={{ value: "Price", angle: -90, position: 'insideLeft' }} />

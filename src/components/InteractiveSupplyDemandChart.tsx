@@ -44,7 +44,7 @@ export default function InteractiveSupplyDemandChart() {
     const { demandData, supplyData, equilibriumPrice, equilibriumQuantity } = generateData(demandShift, supplyShift);
 
     return (
-        <Card>
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>Interactive Supply & Demand</CardTitle>
                 <CardDescription>
@@ -54,7 +54,7 @@ export default function InteractiveSupplyDemandChart() {
             <CardContent className="space-y-8">
                 <div className="h-96 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart margin={{ top: 5, right: 30, left: 20, bottom: 20 }}>
+                        <LineChart margin={{ top: 5, right: 20, left: 10, bottom: 20 }}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="quantity" type="number" domain={[0, 150]} name="Quantity" label={{ value: "Quantity", position: "insideBottom", offset: -15 }} allowDuplicatedCategory={false} />
                             <YAxis type="number" domain={[0, 16]} name="Price" label={{ value: "Price", angle: -90, position: 'insideLeft' }} />
