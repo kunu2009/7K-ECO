@@ -11,20 +11,20 @@ import { useToast } from '@/hooks/use-toast';
 import { analyzeMockTest, AnalyzeTestInput } from '@/ai/flows/analyze-mock-test';
 import type { AnalyzeTestOutput } from '@/ai/flows/analyze-mock-test';
 import MockTestResults from '@/components/MockTestResults';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
-type UserAnswer = {
-    question: string;
-    answer: string;
-};
+type UserAnswers = Record<string, string>; // Key: "sectionIndex-questionIndex", Value: answer
 
 export default function MockTestClient() {
     const [timeLeft, setTimeLeft] = useState(180 * 60); // 180 minutes for 80 marks
     const [isTestRunning, setIsTestRunning] = useState(false);
     const [showAnswers, setShowAnswers] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
-    const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
+    const [userAnswers, setUserAnswers] = useState<UserAnswers>({});
     const [score, setScore] = useState(0);
-    const [incorrectQuestions, setIncorrectQuestions] = useState<Question[]>([]);
     const [aiFeedback, setAiFeedback] = useState<AnalyzeTestOutput | null>(null);
     const [isGeneratingFeedback, setIsGeneratingFeedback] = useState(false);
     const { toast } = useToast();
@@ -52,8 +52,14 @@ export default function MockTestClient() {
         setTimeLeft(180 * 60);
         setUserAnswers({});
         setScore(0);
-        setIncorrectQuestions([]);
         setAiFeedback(null);
+    };
+    
+    const handleAnswerChange = (sectionIndex: number, questionIndex: number, answer: string) => {
+        setUserAnswers(prev => ({
+            ...prev,
+            [`${sectionIndex}-${questionIndex}`]: answer
+        }));
     };
 
     const finishTest = async () => {
@@ -62,25 +68,22 @@ export default function MockTestClient() {
         setShowAnswers(true);
 
         let correctCount = 0;
-        const incorrect: Question[] = [];
-        const allQuestions = mockPaper.sections.flatMap(s => s.questions);
-
-        allQuestions.forEach(q => {
-            // A simple check; for free-text answers, this is tricky.
-            // We'll assume for now that identifying the concept is enough.
-            // A more robust check might involve keywords.
-            // For now, let's just simulate some incorrect answers for the AI.
-        });
-
-        // Let's create a mock list of incorrect questions for demonstration
         const incorrectForAI: { question: string, correctAnswer: string }[] = [];
-        allQuestions.forEach((q, index) => {
-            // Let's say every 4th question is answered incorrectly for demo purposes
-            if (index > 0 && index % 4 === 0) {
-                 incorrectForAI.push({ question: q.text, correctAnswer: q.answer });
-            } else {
-                correctCount += q.marks;
-            }
+
+        mockPaper.sections.forEach((section, sectionIndex) => {
+            section.questions.forEach((question, questionIndex) => {
+                const answerKey = `${sectionIndex}-${questionIndex}`;
+                const userAnswer = userAnswers[answerKey]?.trim().toLowerCase();
+                const correctAnswer = question.answer.trim().toLowerCase().replace(/<\/?b>/g, '').replace(/<br\/>/g, ' ');
+
+                // Simple scoring: check if the user's answer is a substring of the model answer for flexibility
+                // This is a basic approach and works best for MCQs and short answers.
+                 if (userAnswer && correctAnswer.includes(userAnswer)) {
+                    correctCount += question.marks;
+                } else if (userAnswer) { // only count as incorrect if an answer was given
+                     incorrectForAI.push({ question: question.text, correctAnswer: question.answer });
+                }
+            });
         });
 
         setScore(correctCount);
@@ -140,6 +143,29 @@ export default function MockTestClient() {
             onReset={startTest}
         />
     }
+    
+    const renderQuestionInput = (question: Question, sectionIndex: number, qIndex: number) => {
+        const answerKey = `${sectionIndex}-${qIndex}`;
+        if (question.options) {
+             return (
+                <RadioGroup value={userAnswers[answerKey] || ''} onValueChange={(value) => handleAnswerChange(sectionIndex, qIndex, value)}>
+                    {question.options.map((option, optIndex) => (
+                        <div key={optIndex} className="flex items-center space-x-2">
+                             <RadioGroupItem value={option} id={`${answerKey}-${optIndex}`} />
+                             <Label htmlFor={`${answerKey}-${optIndex}`}>{option}</Label>
+                        </div>
+                    ))}
+                </RadioGroup>
+            )
+        }
+        
+        // For free-text questions
+        if (sectionIndex >= 4) { // Q.4 and Q.5 are long answers
+             return <Textarea placeholder="Type your answer here..." value={userAnswers[answerKey] || ''} onChange={(e) => handleAnswerChange(sectionIndex, qIndex, e.target.value)}  />
+        }
+        
+        return <Input placeholder="Type your answer here..." value={userAnswers[answerKey] || ''} onChange={(e) => handleAnswerChange(sectionIndex, qIndex, e.target.value)} />
+    }
 
     return (
         <div className="max-w-5xl mx-auto">
@@ -166,13 +192,11 @@ export default function MockTestClient() {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {section.questions.map((question, qIndex) => (
-                                <div key={qIndex} className="p-4 border rounded-md">
+                                <div key={qIndex} className="p-4 border rounded-md space-y-4">
                                     <p className="font-semibold" dangerouslySetInnerHTML={{ __html: question.text }}></p>
-                                    {question.options && (
-                                        <ul className="list-disc pl-5 mt-2 space-y-1">
-                                            {question.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
-                                        </ul>
-                                    )}
+                                    
+                                    {renderQuestionInput(question, sectionIndex, qIndex)}
+                                    
                                      <Accordion type="single" collapsible className="w-full mt-2">
                                         <AccordionItem value="item-1">
                                             <AccordionTrigger className={showAnswers ? "text-primary" : "text-muted-foreground"}>
@@ -195,3 +219,5 @@ export default function MockTestClient() {
         </div>
     );
 }
+
+    
