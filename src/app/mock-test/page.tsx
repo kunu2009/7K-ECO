@@ -8,7 +8,7 @@ export default function MockTestPage() {
           Mock Test
         </h1>
         <p className="text-muted-foreground mt-2 text-lg">
-          Test your knowledge under exam conditions.
+          Test your knowledge under exam conditions with a full 80-mark paper.
         </p>
       </header>
       <main>

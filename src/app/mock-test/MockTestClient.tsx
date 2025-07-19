@@ -1,202 +1,111 @@
+
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { studyMaterials } from '@/data/study-materials';
-import { chapters } from '@/data/chapters';
-import { cn } from '@/lib/utils';
-import { CheckCircle, Timer, XCircle } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
-
-type MCQ = {
-  question: string;
-  options: string[];
-  answer: string;
-  chapterId: number;
-};
-
-const allMcqs: MCQ[] = chapters.flatMap(chapter =>
-    studyMaterials[chapter.id]?.mcqs.map(mcq => ({ ...mcq, chapterId: chapter.id })) || []
-);
-
-const shuffleArray = (array: any[]) => {
-    return array.map(value => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value);
-};
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Timer, Eye, EyeOff } from 'lucide-react';
+import { mockPaper } from '@/data/mock-paper';
 
 export default function MockTestClient() {
-    const [testState, setTestState] = useState<'settings' | 'running' | 'finished'>('settings');
-    const [numQuestions, setNumQuestions] = useState(10);
-    const [testDuration, setTestDuration] = useState(15); // in minutes
-    const [timeLeft, setTimeLeft] = useState(0);
-    
-    const [questions, setQuestions] = useState<MCQ[]>([]);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
-    
-    const score = useMemo(() => {
-        return questions.reduce((acc, question, index) => {
-            if (userAnswers[index] === question.answer) {
-                return acc + 1;
-            }
-            return acc;
-        }, 0);
-    }, [questions, userAnswers]);
+    const [timeLeft, setTimeLeft] = useState(180 * 60); // 180 minutes for 80 marks
+    const [isTestRunning, setIsTestRunning] = useState(false);
+    const [showAnswers, setShowAnswers] = useState(false);
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
-        if (testState === 'running' && timeLeft > 0) {
+        if (isTestRunning && timeLeft > 0) {
             timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-        } else if (testState === 'running' && timeLeft === 0) {
-            setTestState('finished');
+        } else if (isTestRunning && timeLeft === 0) {
+            setIsTestRunning(false);
+            alert("Time's up!");
         }
         return () => clearTimeout(timer);
-    }, [testState, timeLeft]);
-
-    const startTest = () => {
-        const shuffled = shuffleArray(allMcqs);
-        setQuestions(shuffled.slice(0, numQuestions));
-        setUserAnswers({});
-        setCurrentQuestionIndex(0);
-        setTimeLeft(testDuration * 60);
-        setTestState('running');
-    };
-
-    const handleAnswerChange = (answer: string) => {
-        setUserAnswers(prev => ({ ...prev, [currentQuestionIndex]: answer }));
-    };
-
-    const goToNext = () => {
-        if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(prev => prev + 1);
-        } else {
-            setTestState('finished');
-        }
-    };
-
-    const resetTest = () => {
-        setTestState('settings');
-    }
+    }, [isTestRunning, timeLeft]);
 
     const formatTime = (seconds: number) => {
-        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
         const secs = seconds % 60;
-        return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     };
 
-    if (testState === 'settings') {
+    if (!isTestRunning) {
         return (
-            <Card className="max-w-2xl mx-auto">
+            <Card className="max-w-4xl mx-auto">
                 <CardHeader>
-                    <CardTitle>Configure Your Mock Test</CardTitle>
+                    <CardTitle>80-Mark Mock Examination</CardTitle>
+                    <CardDescription>
+                        This is a full-length mock paper designed to simulate exam conditions.
+                        You will have 3 hours to complete the paper. Click "Start Test" when you are ready.
+                    </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="flex flex-col sm:flex-row items-center justify-between">
-                        <Label htmlFor="num-questions" className="mb-2 sm:mb-0">Number of Questions</Label>
-                        <Select value={String(numQuestions)} onValueChange={(val) => setNumQuestions(Number(val))}>
-                            <SelectTrigger id="num-questions" className="w-full sm:w-[180px]">
-                                <SelectValue placeholder="Select number of questions" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="10">10</SelectItem>
-                                <SelectItem value="20">20</SelectItem>
-                                <SelectItem value="30">30</SelectItem>
-                                <SelectItem value="50">50</SelectItem>
-                            </SelectContent>
-                        </Select>
+                <CardContent className="text-center">
+                    <div className="text-2xl font-bold flex items-center justify-center gap-4">
+                        <Timer className="w-8 h-8"/>
+                        <span>Duration: 3 Hours</span>
                     </div>
-                    <div className="flex flex-col sm:flex-row items-center justify-between">
-                        <Label htmlFor="duration" className="mb-2 sm:mb-0">Test Duration (minutes)</Label>
-                         <Select value={String(testDuration)} onValueChange={(val) => setTestDuration(Number(val))}>
-                            <SelectTrigger id="duration" className="w-full sm:w-[180px]">
-                                <SelectValue placeholder="Select duration" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="15">15</SelectItem>
-                                <SelectItem value="30">30</SelectItem>
-                                <SelectItem value="45">45</SelectItem>
-                                <SelectItem value="60">60</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                    <p className="text-muted-foreground mt-2">Total Marks: 80</p>
                 </CardContent>
                 <CardFooter>
-                    <Button onClick={startTest} className="w-full">Start Test</Button>
+                    <Button onClick={() => setIsTestRunning(true)} className="w-full" size="lg">Start Test</Button>
                 </CardFooter>
             </Card>
         );
     }
-
-    if (testState === 'finished') {
-        return (
-            <Card className="max-w-2xl mx-auto">
-                <CardHeader className="text-center">
-                    <CardTitle>Test Over!</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center space-y-4">
-                    <p className="text-4xl font-bold">Your Score: {score} / {questions.length}</p>
-                    <p className="text-muted-foreground">You answered {score} out of {questions.length} questions correctly.</p>
-                </CardContent>
-                 <CardFooter className="flex-col gap-4">
-                    <Button onClick={resetTest} className="w-full">Take Another Test</Button>
-                    <div className="w-full max-h-80 overflow-y-auto space-y-4 p-4 border rounded-md">
-                        <h3 className="font-bold text-lg">Review Your Answers</h3>
-                        {questions.map((q, index) => (
-                           <div key={index} className="p-2 border-b">
-                                <p className="font-semibold">{index + 1}. {q.question}</p>
-                                <p className={cn("text-sm", userAnswers[index] === q.answer ? "text-green-600" : "text-red-600")}>
-                                    Your answer: {userAnswers[index] || "Not answered"}
-                                </p>
-                                <p className="text-sm text-green-700">Correct answer: {q.answer}</p>
-                           </div>
-                        ))}
-                    </div>
-                 </CardFooter>
-            </Card>
-        );
-    }
-
-    const currentQuestion = questions[currentQuestionIndex];
-    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-
+    
     return (
-        <Card className="max-w-4xl mx-auto">
-            <CardHeader>
-                <div className="flex justify-between items-center">
-                    <CardTitle>Question {currentQuestionIndex + 1} of {questions.length}</CardTitle>
+        <div className="max-w-5xl mx-auto">
+            <div className="bg-card p-4 rounded-lg shadow-md sticky top-4 z-20 flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                <h2 className="text-xl font-bold text-primary">Mock Paper</h2>
+                <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2 font-mono text-lg font-bold bg-destructive text-destructive-foreground px-3 py-1 rounded-md">
                         <Timer className="w-5 h-5"/>
                         {formatTime(timeLeft)}
                     </div>
+                    <Button variant="outline" size="sm" onClick={() => setShowAnswers(!showAnswers)}>
+                        {showAnswers ? <EyeOff className="mr-2"/> : <Eye className="mr-2"/>}
+                        {showAnswers ? 'Hide Answers' : 'Show Answers'}
+                    </Button>
                 </div>
-                <Progress value={progress} className="w-full mt-4" />
-            </CardHeader>
-            <CardContent>
-                <p className="text-lg font-semibold mb-4">{currentQuestion.question}</p>
-                 <RadioGroup
-                    onValueChange={handleAnswerChange}
-                    value={userAnswers[currentQuestionIndex]}
-                >
-                    {currentQuestion.options.map((option, optionIndex) => (
-                        <div key={optionIndex} className="flex items-center space-x-3 mb-2 p-3 border rounded-md hover:bg-muted/50">
-                            <RadioGroupItem value={option} id={`q${currentQuestionIndex}-o${optionIndex}`} />
-                            <Label htmlFor={`q${currentQuestionIndex}-o${optionIndex}`} className="flex-grow cursor-pointer text-base">
-                                {option}
-                            </Label>
-                        </div>
-                    ))}
-                </RadioGroup>
-            </CardContent>
-            <CardFooter className="justify-end">
-                <Button onClick={goToNext}>
-                    {currentQuestionIndex < questions.length - 1 ? "Next Question" : "Finish Test"}
-                </Button>
-            </CardFooter>
-        </Card>
+            </div>
+
+            <div className="space-y-6">
+                {mockPaper.sections.map((section, sectionIndex) => (
+                    <Card key={sectionIndex}>
+                        <CardHeader>
+                            <CardTitle>{section.title} (Marks: {section.totalMarks})</CardTitle>
+                            {section.instructions && <CardDescription>{section.instructions}</CardDescription>}
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {section.questions.map((question, qIndex) => (
+                                <div key={qIndex} className="p-4 border rounded-md">
+                                    <p className="font-semibold" dangerouslySetInnerHTML={{ __html: question.text }}></p>
+                                    {question.options && (
+                                        <ul className="list-disc pl-5 mt-2 space-y-1">
+                                            {question.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                                        </ul>
+                                    )}
+                                     <Accordion type="single" collapsible className="w-full mt-2">
+                                        <AccordionItem value="item-1">
+                                            <AccordionTrigger className={showAnswers ? "text-primary" : "text-muted-foreground"}>
+                                                {showAnswers ? 'Hide Answer' : 'Show Answer'}
+                                            </AccordionTrigger>
+                                            <AccordionContent>
+                                                <p className="text-green-700 dark:text-green-400 font-semibold" dangerouslySetInnerHTML={{ __html: question.answer }}></p>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    </Accordion>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+             <div className="mt-8 text-center">
+                <Button onClick={() => { setIsTestRunning(false); setTimeLeft(180 * 60); setShowAnswers(false); }} size="lg">Finish and Reset Test</Button>
+            </div>
+        </div>
     );
 }
