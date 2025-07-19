@@ -54,7 +54,7 @@ export default function ChapterPage({ params }: ChapterPageProps) {
         <Tabs defaultValue="summary" onValueChange={setActiveTab} className="w-full h-full flex flex-col">
           <div className={cn(isReelsActive && "hidden")}>
             <ScrollArea className="w-full whitespace-nowrap">
-              <TabsList className={cn("grid w-full bg-card/80 backdrop-blur-sm sticky top-0 z-20 sm:w-full", showInteractiveCharts ? "grid-cols-6" : "grid-cols-5")}>
+              <TabsList className="flex-nowrap w-auto">
                 <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
                 <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
                 <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>

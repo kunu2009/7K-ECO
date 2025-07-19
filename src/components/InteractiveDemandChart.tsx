@@ -9,9 +9,10 @@ import { Label as UiLabel } from "@/components/ui/label"
 
 const generateDemandData = () => {
     const data = [];
-    for (let price = 1; price <= 10; price++) {
-        const demand = Math.round(110 - (price * 10));
-        data.push({ price, demand: Math.max(0, demand) });
+    // P = 11 - 0.1Q  => 10P = 110 - Q => Q = 110 - 10P
+    for (let quantity = 0; quantity <= 100; quantity += 5) {
+        const price = Math.max(0, 11 - (quantity / 10));
+        data.push({ quantity, price });
     }
     return data;
 };
@@ -19,7 +20,8 @@ const generateDemandData = () => {
 export default function InteractiveDemandChart() {
     const [price, setPrice] = React.useState(6);
     const demandData = generateDemandData();
-    const currentQuantity = 110 - (price * 10);
+    // Q = 110 - 10P
+    const currentQuantity = Math.max(0, 110 - (price * 10));
 
     return (
         <Card>
@@ -34,13 +36,13 @@ export default function InteractiveDemandChart() {
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={demandData} margin={{ top: 5, right: 30, left: 20, bottom: 20 }}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="demand" type="number" domain={[0, 110]} name="Quantity Demanded" label={{ value: "Quantity Demanded", position: "insideBottom", offset: -15 }} />
-                            <YAxis dataKey="price" type="number" domain={[0, 11]} name="Price" label={{ value: "Price", angle: -90, position: 'insideLeft' }} />
-                            <Tooltip formatter={(value, name) => [value, name]} labelFormatter={(label) => `Price: ${label}`}/>
+                            <XAxis dataKey="quantity" type="number" domain={[0, 110]} name="Quantity Demanded" label={{ value: "Quantity Demanded", position: "insideBottom", offset: -15 }} />
+                            <YAxis dataKey="price" type="number" domain={[0, 12]} name="Price" label={{ value: "Price", angle: -90, position: 'insideLeft' }} />
+                            <Tooltip formatter={(value, name) => [value.toFixed(2), name.charAt(0).toUpperCase() + name.slice(1)]} labelFormatter={(label) => `Quantity: ${label}`}/>
                             <Legend wrapperStyle={{ bottom: 0 }} />
-                            <Line dataKey="demand" name="Demand" stroke="#8884d8" strokeWidth={2} dot={false} type="monotone" />
-                             <ReferenceDot x={currentQuantity} y={price} r={6} fill="red" stroke="white">
-                                <Label value={`(Q:${currentQuantity}, P:${price})`} position="top" offset={10} />
+                            <Line dataKey="price" name="Demand" stroke="#8884d8" strokeWidth={2} dot={false} type="monotone" />
+                             <ReferenceDot x={currentQuantity} y={price} r={6} fill="red" stroke="white" ifOverflow="visible">
+                                <Label value={`(Q: ${currentQuantity.toFixed(0)}, P: ${price.toFixed(2)})`} position="top" offset={10} />
                             </ReferenceDot>
                         </LineChart>
                     </ResponsiveContainer>
@@ -53,12 +55,12 @@ export default function InteractiveDemandChart() {
                             <Slider
                                 id="price-slider"
                                 min={1}
-                                max={10}
-                                step={0.5}
+                                max={11}
+                                step={0.25}
                                 value={[price]}
                                 onValueChange={(value) => setPrice(value[0])}
                             />
-                             <span>$10</span>
+                             <span>$11</span>
                         </div>
                          <p className="text-center text-sm text-muted-foreground">Current Price: ${price.toFixed(2)}</p>
                     </div>
