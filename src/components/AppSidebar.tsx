@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Home, Timer } from "lucide-react";
+import { BookOpen, Home, Timer, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -81,6 +81,19 @@ export default function AppSidebar() {
               <Link href="/mock-test" onClick={handleLinkClick}>
                 <Timer />
                 <span>Mock Test</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={pathname === "/personalize"}
+              tooltip={{ children: "Personalize" }}
+            >
+              <Link href="/personalize" onClick={handleLinkClick}>
+                <User />
+                <span>Personalize</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

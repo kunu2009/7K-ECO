@@ -12,7 +12,6 @@ import { chapters } from '@/data/chapters';
 import { Layers, ListChecks, CheckCircle, XCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import CustomFlashcardsWidget from './CustomFlashcardsWidget';
 
 type Flashcard = {
   term: string;
@@ -182,9 +181,6 @@ export default function DashboardWidgets() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div className="lg:col-span-2">
-        <CustomFlashcardsWidget />
-      </div>
       <div>
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
             <h3 className="flex items-center text-2xl font-bold font-headline"><Layers className="mr-3 text-primary"/> Flashcard Review</h3>
