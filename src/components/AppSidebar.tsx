@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Home, Timer, BookCopy } from "lucide-react";
+import { BookOpen, Home, Timer } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,17 +13,22 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { chapters } from "@/data/chapters";
 
 export default function AppSidebar() {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
+
+  const handleLinkClick = () => {
+    setOpenMobile(false);
+  }
 
   return (
     <Sidebar className="border-r" side="left" collapsible="icon">
       <SidebarHeader className="p-4 justify-center">
-         <Link href="/" className="font-bold text-2xl text-primary font-headline">E</Link>
+         <Link href="/" className="font-bold text-2xl text-primary font-headline" onClick={handleLinkClick}>E</Link>
       </SidebarHeader>
       <SidebarContent className="p-2">
         <SidebarMenu>
@@ -33,7 +38,7 @@ export default function AppSidebar() {
               isActive={pathname === "/"}
               tooltip={{ children: "Dashboard" }}
             >
-              <Link href="/">
+              <Link href="/" onClick={handleLinkClick}>
                 <Home />
                 <span>Dashboard</span>
               </Link>
@@ -58,7 +63,7 @@ export default function AppSidebar() {
                     asChild
                     isActive={pathname === `/chapter/${chapter.id}`}
                   >
-                    <Link href={`/chapter/${chapter.id}`}>
+                    <Link href={`/chapter/${chapter.id}`} onClick={handleLinkClick}>
                       {chapter.id}. {chapter.title}
                     </Link>
                   </SidebarMenuSubButton>
@@ -73,7 +78,7 @@ export default function AppSidebar() {
               isActive={pathname === "/mock-test"}
               tooltip={{ children: "Mock Test" }}
             >
-              <Link href="/mock-test">
+              <Link href="/mock-test" onClick={handleLinkClick}>
                 <Timer />
                 <span>Mock Test</span>
               </Link>
