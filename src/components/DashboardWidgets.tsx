@@ -13,6 +13,7 @@ import { Layers, ListChecks, CheckCircle, XCircle, ArrowLeft, ArrowRight, Bookma
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import MnemonicGenerator from './MnemonicGenerator';
 
 type ContentType = 'flashcard' | 'mcq';
 
@@ -98,11 +99,14 @@ const FlashcardWidget = ({ card, chapterId, onNext, onPrev, currentIndex, totalC
 
   return (
     <div className="h-full flex flex-col">
-       <div className="flex justify-between items-center mb-2">
+       <div className="flex justify-between items-center mb-2 relative">
          <p className="text-muted-foreground text-sm">From <Link href={`/chapter/${chapterId}`} className="font-bold underline">Chapter {chapterId}</Link></p>
-         <Button variant="ghost" size="icon" onClick={() => toggleBookmark('flashcard', chapterId, card)} title="Bookmark card">
-             <Bookmark className={cn("w-5 h-5", isBookmarked('flashcard', chapterId, card) ? 'text-yellow-500 fill-yellow-400' : 'text-muted-foreground')} />
-         </Button>
+         <div>
+            <MnemonicGenerator term={card.term} definition={card.definition} />
+             <Button variant="ghost" size="icon" onClick={() => toggleBookmark('flashcard', chapterId, card)} title="Bookmark card">
+                 <Bookmark className={cn("w-5 h-5", isBookmarked('flashcard', chapterId, card) ? 'text-yellow-500 fill-yellow-400' : 'text-muted-foreground')} />
+             </Button>
+         </div>
        </div>
       <div className="perspective flex-grow" onClick={() => setIsFlipped(!isFlipped)}>
         <motion.div

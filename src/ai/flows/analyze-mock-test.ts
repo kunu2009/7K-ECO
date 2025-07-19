@@ -8,9 +8,9 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'zod';
 
-export const AnalyzeTestInputSchema = z.object({
+const AnalyzeTestInputSchema = z.object({
   incorrectQuestions: z.array(z.object({
     question: z.string(),
     correctAnswer: z.string(),
@@ -18,7 +18,7 @@ export const AnalyzeTestInputSchema = z.object({
 });
 export type AnalyzeTestInput = z.infer<typeof AnalyzeTestInputSchema>;
 
-export const AnalyzeTestOutputSchema = z.object({
+const AnalyzeTestOutputSchema = z.object({
   analysis: z.string().describe("A brief, overall summary of the user's performance in 1-2 sentences. Be encouraging."),
   recommendations: z.array(z.object({
       concept: z.string().describe("The core economic concept or chapter the user struggled with."),

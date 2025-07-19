@@ -13,10 +13,11 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal, RefreshCw } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
+import MnemonicGenerator from './MnemonicGenerator';
 
 type Flashcard = {
   term: string;
@@ -49,7 +50,8 @@ const FlashcardComponent = ({ card, onFlip }: { card: Flashcard, onFlip: () => v
       >
         {/* Front of the card */}
         <div className="absolute w-full h-full backface-hidden">
-          <Card className="h-full bg-accent/20 border-accent">
+          <Card className="h-full bg-accent/20 border-accent relative">
+            <MnemonicGenerator term={card.term} definition={card.definition} />
             <CardContent className="flex flex-col items-center justify-center p-6 h-full text-center">
               <p className="text-muted-foreground text-sm mb-4">Term</p>
               <h3 className="text-2xl font-bold font-headline text-accent-foreground">{card.term}</h3>
