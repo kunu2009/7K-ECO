@@ -18,7 +18,6 @@ import MustKnowSection from '@/components/MustKnowSection';
 import ReelsSection from '@/components/ReelsSection';
 import { FileText, Layers, ListChecks, Star, PlayCircle, BarChart2 } from 'lucide-react';
 import { studyMaterials } from '@/data/study-materials';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import InteractiveSupplyDemandChart from '@/components/InteractiveSupplyDemandChart';
 import InteractiveDemandChart from '@/components/InteractiveDemandChart';
@@ -53,19 +52,16 @@ export default function ChapterPage({ params }: ChapterPageProps) {
       <main className={cn(isReelsActive ? "h-screen" : "mt-8")}>
         <Tabs defaultValue="summary" onValueChange={setActiveTab} className="w-full h-full flex flex-col">
           <div className={cn(isReelsActive && "hidden")}>
-            <ScrollArea className="w-full">
-              <TabsList className="whitespace-nowrap">
-                <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
-                <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
-                <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>
-                <TabsTrigger value="must-know"><Star className="w-4 h-4 mr-2"/>Must Know</TabsTrigger>
-                {showInteractiveChart && (
-                   <TabsTrigger value="interactive-chart"><BarChart2 className="w-4 h-4 mr-2"/>Interactive Chart</TabsTrigger>
-                )}
-                <TabsTrigger value="reels"><PlayCircle className="w-4 h-4 mr-2"/>Reels</TabsTrigger>
-              </TabsList>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
+            <TabsList className="h-auto flex-wrap justify-start">
+              <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
+              <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
+              <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>
+              <TabsTrigger value="must-know"><Star className="w-4 h-4 mr-2"/>Must Know</TabsTrigger>
+              {showInteractiveChart && (
+                  <TabsTrigger value="interactive-chart"><BarChart2 className="w-4 h-4 mr-2"/>Interactive Chart</TabsTrigger>
+              )}
+              <TabsTrigger value="reels"><PlayCircle className="w-4 h-4 mr-2"/>Reels</TabsTrigger>
+            </TabsList>
           </div>
           <TabsContent value="summary" className="mt-6">
             <SummarySection summary={materials.summary} />
