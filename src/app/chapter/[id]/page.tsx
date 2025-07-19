@@ -15,6 +15,7 @@ import MustKnowSection from '@/components/MustKnowSection';
 import ReelsSection from '@/components/ReelsSection';
 import { FileText, Layers, ListChecks, Star, PlayCircle } from 'lucide-react';
 import { studyMaterials } from '@/data/study-materials';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 type ChapterPageProps = {
   params: {
@@ -37,13 +38,16 @@ export default function ChapterPage({ params }: ChapterPageProps) {
       <ChapterHeader title={chapter.title} />
       <main className="mt-8">
         <Tabs defaultValue="summary" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 bg-card/80 backdrop-blur-sm sticky top-0 z-20">
-            <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
-            <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
-            <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>
-            <TabsTrigger value="must-know"><Star className="w-4 h-4 mr-2"/>Must Know</TabsTrigger>
-            <TabsTrigger value="reels"><PlayCircle className="w-4 h-4 mr-2"/>Reels</TabsTrigger>
-          </TabsList>
+          <ScrollArea className="w-full whitespace-nowrap">
+            <TabsList className="grid w-full grid-cols-5 bg-card/80 backdrop-blur-sm sticky top-0 z-20 sm:w-full">
+              <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
+              <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
+              <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>
+              <TabsTrigger value="must-know"><Star className="w-4 h-4 mr-2"/>Must Know</TabsTrigger>
+              <TabsTrigger value="reels"><PlayCircle className="w-4 h-4 mr-2"/>Reels</TabsTrigger>
+            </TabsList>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
           <TabsContent value="summary" className="mt-6">
             <SummarySection summary={materials.summary} />
           </TabsContent>
@@ -57,7 +61,7 @@ export default function ChapterPage({ params }: ChapterPageProps) {
             <MustKnowSection mustKnow={materials.mustKnow} />
           </TabsContent>
           <TabsContent value="reels" className="mt-6">
-            <ReelsSection />
+            <ReelsSection reels={materials.reels} />
           </TabsContent>
         </Tabs>
       </main>
