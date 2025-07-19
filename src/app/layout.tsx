@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import AppSidebar from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import StudyBuddyWidget from "@/components/StudyBuddyWidget";
 
 export const metadata: Metadata = {
   title: "EcoLearn",
@@ -36,6 +37,7 @@ export default function RootLayout({
             </main>
           </div>
         </SidebarProvider>
+        <StudyBuddyWidget />
         <Toaster />
       </body>
     </html>
