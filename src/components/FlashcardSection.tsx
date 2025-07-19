@@ -1,8 +1,9 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import type { EmblaCarouselType } from 'embla-carousel-react'
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -12,18 +13,35 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
+import { Terminal, RefreshCw } from 'lucide-react';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 type Flashcard = {
   term: string;
   definition: string;
 };
 
-const FlashcardComponent = ({ card }: { card: Flashcard }) => {
+const FlashcardComponent = ({ card, onFlip }: { card: Flashcard, onFlip: () => void }) => {
   const [isFlipped, setIsFlipped] = useState(false);
+  const hasFlipped = useRef(false);
+
+  useEffect(() => {
+      setIsFlipped(false);
+      hasFlipped.current = false;
+  }, [card]);
+
+  const handleFlip = () => {
+      setIsFlipped(!isFlipped);
+      if (!hasFlipped.current) {
+          onFlip();
+          hasFlipped.current = true;
+      }
+  }
 
   return (
-    <div className="p-1 perspective" onClick={() => setIsFlipped(!isFlipped)}>
+    <div className="p-1 perspective" onClick={handleFlip}>
       <motion.div
         className="relative h-80 w-full cursor-pointer preserve-3d"
         animate={{ rotateY: isFlipped ? 180 : 0 }}
@@ -55,6 +73,10 @@ const FlashcardComponent = ({ card }: { card: Flashcard }) => {
 
 
 export default function FlashcardSection({ flashcards }: { flashcards: Flashcard[] }) {
+  const [api, setApi] = useState<EmblaCarouselType>()
+  const [jumpTo, setJumpTo] = useState("");
+  const { toast } = useToast();
+  
   if (!flashcards || flashcards.length === 0) {
     return (
       <Alert variant="destructive">
@@ -65,17 +87,47 @@ export default function FlashcardSection({ flashcards }: { flashcards: Flashcard
     );
   }
 
+  const handleJump = (e: React.FormEvent) => {
+    e.preventDefault();
+    const slideNum = parseInt(jumpTo, 10);
+    if (api && !isNaN(slideNum) && slideNum > 0 && slideNum <= flashcards.length) {
+      api.scrollTo(slideNum - 1);
+    } else {
+        toast({
+            title: "Invalid number",
+            description: `Please enter a number between 1 and ${flashcards.length}.`,
+            variant: "destructive",
+        })
+    }
+    setJumpTo("");
+  }
+
+
   return (
-    <Carousel className="w-full max-w-xl mx-auto" opts={{ loop: true }}>
-      <CarouselContent>
-        {flashcards.map((card, index) => (
-          <CarouselItem key={index}>
-            <FlashcardComponent card={card} />
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+    <div className="w-full max-w-xl mx-auto">
+      <Carousel className="w-full" opts={{ loop: true }} setApi={setApi}>
+        <CarouselContent>
+          {flashcards.map((card, index) => (
+            <CarouselItem key={index}>
+              <FlashcardComponent card={card} onFlip={() => {}}/>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+       <form onSubmit={handleJump} className="mt-4 flex gap-2 justify-center items-center">
+            <Input
+                type="number"
+                min="1"
+                max={flashcards.length}
+                value={jumpTo}
+                onChange={e => setJumpTo(e.target.value)}
+                placeholder={`Jump to card (1-${flashcards.length})`}
+                className="w-48"
+            />
+            <Button type="submit">Jump</Button>
+       </form>
+    </div>
   );
 }

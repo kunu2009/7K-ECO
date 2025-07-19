@@ -26,7 +26,7 @@ export default function ChapterPage({ params }: ChapterPageProps) {
   const chapterId = parseInt(params.id, 10);
   const chapter = chapters.find((c) => c.id === chapterId);
 
-  if (!chapter) {
+  if (!chapter || !studyMaterials[chapterId]) {
     notFound();
   }
 
@@ -37,7 +37,7 @@ export default function ChapterPage({ params }: ChapterPageProps) {
       <ChapterHeader title={chapter.title} />
       <main className="mt-8">
         <Tabs defaultValue="summary" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 bg-card/80 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 bg-card/80 backdrop-blur-sm sticky top-0 z-20">
             <TabsTrigger value="summary"><FileText className="w-4 h-4 mr-2"/>Summary</TabsTrigger>
             <TabsTrigger value="flashcards"><Layers className="w-4 h-4 mr-2"/>Flashcards</TabsTrigger>
             <TabsTrigger value="mcqs"><ListChecks className="w-4 h-4 mr-2"/>MCQs</TabsTrigger>

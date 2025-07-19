@@ -8,6 +8,7 @@ import {
   CardDescription,
   CardContent,
 } from '@/components/ui/card';
+import DashboardWidgets from '@/components/DashboardWidgets';
 
 export default function Home() {
   return (
@@ -21,6 +22,10 @@ export default function Home() {
         </p>
       </header>
       <main>
+        <DashboardWidgets />
+        <h2 className="text-3xl font-bold font-headline mt-12 mb-6 text-center text-foreground">
+          Chapters
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {chapters.map((chapter) => (
             <Link href={`/chapter/${chapter.id}`} key={chapter.id} passHref>

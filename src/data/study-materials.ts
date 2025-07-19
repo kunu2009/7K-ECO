@@ -162,16 +162,16 @@ export const studyMaterials: Record<number, StudyMaterials> = {
         ]
     },
     3: {
-        summary: "Demand analysis focuses on understanding consumer behavior. 'Demand' is the desire for a commodity backed by the ability and willingness to pay for it. The Law of Demand states an inverse relationship between a commodity's price and its quantity demanded, ceteris paribus. This is why the demand curve slopes downwards. Demand is influenced by several determinants besides price, including income, tastes, prices of substitute and complementary goods, and expectations. A change in price causes a movement along the demand curve, while a change in any other determinant causes a shift in the entire curve. 'Elasticity of Demand' measures the responsiveness of quantity demanded to a change in one of its determinants, most commonly price. It can be elastic (responsive), inelastic (unresponsive), or unitary.",
+        summary: "Demand analysis focuses on understanding consumer behavior. 'Demand' is the desire for a commodity backed by the ability and willingness to pay for it. The Law of Demand states an inverse relationship between a commodity's price and its quantity demanded, ceteris paribus. This is why the demand curve slopes downwards. Demand is influenced by several determinants besides price, including income, tastes, prices of substitute and complementary goods, and expectations. A change in price causes a movement along the demand curve (expansion or contraction), while a change in any other determinant causes a shift in the entire curve (increase or decrease).",
         mustKnow: [
             "Demand = Desire + Ability to Pay + Willingness to Pay.",
             "The Law of Demand shows an inverse relationship between price and quantity demanded.",
             "A demand curve slopes downwards from left to right.",
             "A change in price causes a movement along the demand curve (expansion/contraction).",
             "A change in other factors (income, tastes etc.) causes a shift in the demand curve (increase/decrease).",
-            "Substitute goods have a positive cross-price elasticity (e.g., tea and coffee).",
-            "Complementary goods have a negative cross-price elasticity (e.g., car and petrol).",
-            "Price elasticity of demand (Ed) measures responsiveness of demand to price changes."
+            "Substitute goods are alternatives (e.g., tea and coffee).",
+            "Complementary goods are used together (e.g., car and petrol).",
+            "Giffen goods are an exception to the law of demand."
         ],
         flashcards: [
             { term: "Demand", definition: "The quantity of a good or service that consumers are willing and able to purchase at various prices during a given period of time." },
@@ -184,12 +184,66 @@ export const studyMaterials: Record<number, StudyMaterials> = {
             { term: "Contraction of Demand", definition: "A fall in quantity demanded due to a rise in price, represented by an upward movement along the same demand curve." },
             { term: "Increase in Demand", definition: "A rise in demand at the same price due to favorable changes in other factors, shifting the demand curve to the right." },
             { term: "Decrease in Demand", definition: "A fall in demand at the same price due to unfavorable changes in other factors, shifting the demand curve to the left." },
-            { term: "Substitute Goods", definition: "Goods that can be used in place of each other, like tea and coffee. The price of one is directly related to the demand for the other." },
-            { term: "Complementary Goods", definition: "Goods that are consumed together, like cars and petrol. The price of one is inversely related to the demand for the other." },
+            { term: "Determinants of Demand", definition: "Factors other than price that can influence demand, such as income, tastes, and prices of related goods." },
+            { term: "Income", definition: "A key determinant of demand; for normal goods demand rises with income, for inferior goods it falls." },
+            { term: "Tastes and Preferences", definition: "A determinant of demand based on consumer habits, fashion, and customs." },
+            { term: "Population", definition: "The size and composition of the population, which affects the overall market demand." },
+            { term: "Expectations", definition: "Consumer expectations about future prices, which can influence current demand." },
+            { term: "Substitute Goods", definition: "Goods that can be used in place of each other, like tea and coffee." },
+            { term: "Complementary Goods", definition: "Goods that are consumed together, like cars and petrol." },
             { term: "Normal Goods", definition: "Goods for which demand increases as consumer income increases." },
             { term: "Inferior Goods", definition: "Goods for which demand decreases as consumer income increases." },
             { term: "Giffen Goods", definition: "Highly inferior goods with a paradoxical upward-sloping demand curve, where demand increases as price increases." },
             { term: "Veblen Goods (Prestige Goods)", definition: "Luxury goods whose demand increases as their price increases, due to their exclusive nature and appeal as a status symbol." },
+            { term: "Habitual Goods", definition: "Goods for which demand is not significantly affected by price changes due to addiction or habit." },
+            { term: "Ignorance", definition: "A situation where a consumer buys more of a product at a higher price, wrongly assuming higher price means higher quality." },
+            { term: "Speculation", definition: "An exception to the law of demand where consumers buy more at a higher price expecting it to rise further." },
+            { term: "Income Effect", definition: "The change in demand for a good or service caused by a change in a consumer's purchasing power, resulting from a change in real income." },
+            { term: "Substitution Effect", definition: "The effect of a change in the relative price of a good, which encourages consumers to substitute the cheaper good." },
+            { term: "Direct Demand", definition: "Demand for goods that directly satisfy consumer wants, like food or clothing." },
+            { term: "Indirect (Derived) Demand", definition: "Demand for goods that are needed to produce other goods, such as the demand for factors of production." },
+            { term: "Composite Demand", definition: "Demand for a commodity that has multiple uses, like electricity." },
+            { term: "Competitive Demand", definition: "Demand for goods that are substitutes for each other." },
+        ],
+        mcqs: [
+            { question: "The relationship between price and quantity demanded is typically:", options: ["Direct", "Inverse", "No relationship", "Constant"], answer: "Inverse" },
+            { question: "A movement along the demand curve is caused by a change in:", options: ["Income", "Tastes", "The price of the good itself", "Price of related goods"], answer: "The price of the good itself" },
+            { question: "If the price of coffee increases, the demand for tea (a substitute) will:", options: ["Decrease", "Increase", "Remain unchanged", "Become zero"], answer: "Increase" },
+            { question: "Goods that are consumed together are called:", options: ["Inferior goods", "Normal goods", "Substitute goods", "Complementary goods"], answer: "Complementary goods" },
+            { question: "For a Giffen good, the demand curve is:", options: ["Downward sloping", "Upward sloping", "Horizontal", "Vertical"], answer: "Upward sloping" },
+            { question: "A shift of the demand curve to the right indicates:", options: ["A decrease in demand", "An expansion of demand", "An increase in demand", "A contraction of demand"], answer: "An increase in demand" },
+            { question: "Which of these is NOT a determinant of demand?", options: ["Price of inputs", "Consumer income", "Tastes and preferences", "Population size"], answer: "Price of inputs" },
+            { question: "An 'expansion of demand' means:", options: ["A shift in the demand curve", "More is demanded at the same price", "More is demanded due to a fall in price", "Less is demanded at a higher price"], answer: "More is demanded due to a fall in price" },
+            { question: "A fall in the price of a complementary good will cause the demand for the other good to:", options: ["Fall", "Rise", "Stay the same", "Vanish"], answer: "Rise" },
+            { question: "Demand for factors of production is an example of:", options: ["Direct Demand", "Composite Demand", "Derived Demand", "Competitive Demand"], answer: "Derived Demand" },
+            { question: "Veblen goods are also known as:", options: ["Inferior goods", "Normal goods", "Prestige goods", "Giffen goods"], answer: "Prestige goods" },
+            { question: "What is a 'Demand Schedule'?", options: ["A graph", "A law", "A table showing price and quantity demanded", "A type of good"], answer: "A table showing price and quantity demanded" },
+            { question: "A change in fashion leads to a:", options: ["Movement along the demand curve", "Shift in the demand curve", "Contraction of demand", "Expansion of demand"], answer: "Shift in the demand curve" },
+            { question: "Market demand is the sum of:", options: ["All individual demands", "Demands of two consumers", "Supply and demand", "The firm's demand"], answer: "All individual demands" },
+            { question: "Which is an exception to the Law of Demand?", options: ["Normal goods", "Luxury cars", "Giffen goods", "Services"], answer: "Giffen goods" },
+            { question: "A 'decrease in demand' is represented by:", options: ["A leftward shift of the demand curve", "A rightward shift of the demand curve", "An upward movement on the curve", "A downward movement on the curve"], answer: "A leftward shift of the demand curve" },
+            { question: "Demand for electricity is an example of:", options: ["Joint Demand", "Composite Demand", "Derived Demand", "Competitive Demand"], answer: "Composite Demand" },
+            { question: "If consumers expect the price of sugar to rise in the future, its current demand will:", options: ["Decrease", "Increase", "Remain unchanged", "Become zero"], answer: "Increase" },
+            { question: "The downward slope of the demand curve is explained by:", options: ["Law of Diminishing Marginal Utility", "Income Effect", "Substitution Effect", "All of the above"], answer: "All of the above" },
+            { question: "If demand for a good decreases as income increases, it is a(n):", options: ["Normal Good", "Veblen Good", "Complementary Good", "Inferior Good"], answer: "Inferior Good" },
+            { question: "What does 'ceteris paribus' mean in the context of the Law of Demand?", options: ["Prices are constant", "Other factors affecting demand are constant", "Income is variable", "Demand is constant"], answer: "Other factors affecting demand are constant" },
+            { question: "A 'contraction of demand' occurs due to:", options: ["A rise in price", "A fall in price", "A rise in income", "A fall in tastes"], answer: "A rise in price" },
+            { question: "Tea and coffee are examples of:", options: ["Complementary goods", "Giffen goods", "Substitute goods", "Unrelated goods"], answer: "Substitute goods" },
+        ]
+    },
+    4: {
+        summary: "'Elasticity of Demand' measures the responsiveness of quantity demanded to a change in one of its determinants. The most common type is Price Elasticity of Demand (Ed), which measures how demand responds to a price change. It can be elastic (responsive, Ed > 1), inelastic (unresponsive, Ed < 1), or unitary (proportionally responsive, Ed = 1). Two extreme cases are perfectly elastic (Ed = ∞) and perfectly inelastic (Ed = 0). Other types include Income Elasticity (responsiveness to income change) and Cross Elasticity (responsiveness to a change in the price of another good). This concept is vital for businesses in setting prices and for governments in levying taxes.",
+        mustKnow: [
+            "Elasticity of Demand measures the responsiveness of demand.",
+            "Price Elasticity (Ed) = % Change in Quantity Demanded / % Change in Price.",
+            "Ed > 1: Elastic (luxury goods).",
+            "Ed < 1: Inelastic (necessities).",
+            "Ed = 1: Unitary Elastic.",
+            "Income Elasticity is positive for normal goods and negative for inferior goods.",
+            "Cross Elasticity is positive for substitutes and negative for complements.",
+            "The Total Outlay method is used to measure price elasticity by observing total expenditure."
+        ],
+        flashcards: [
             { term: "Elasticity of Demand", definition: "A measure of the responsiveness of the quantity demanded of a good to a change in one of its determinants." },
             { term: "Price Elasticity of Demand (Ed)", definition: "Measures how much the quantity demanded of a good responds to a change in the price of that good." },
             { term: "Perfectly Elastic Demand (Ed = ∞)", definition: "A situation where an infinite quantity is demanded at a particular price, and none at a slightly higher price. The demand curve is a horizontal line." },
@@ -199,33 +253,49 @@ export const studyMaterials: Record<number, StudyMaterials> = {
             { term: "Relatively Inelastic Demand (Ed < 1)", definition: "A situation where the percentage change in quantity demanded is less than the percentage change in price." },
             { term: "Income Elasticity of Demand", definition: "Measures how much the quantity demanded of a good responds to a change in consumers' income." },
             { term: "Cross Elasticity of Demand", definition: "Measures how much the quantity demanded of one good responds to a change in the price of another good." },
-            { term: "Total Outlay Method", definition: "A method to measure price elasticity by comparing the change in total expenditure before and after the price change." },
-            { term: "Point Method", definition: "A geometric method to measure price elasticity at a specific point on the demand curve." },
-            { term: "Arc Method", definition: "A method to calculate price elasticity over a range or arc of the demand curve." },
-            { term: "Determinants of Demand", definition: "Factors other than price that can influence demand, such as income, tastes, and prices of related goods." },
-            { term: "Speculation", definition: "An exception to the law of demand where consumers buy more at a higher price expecting it to rise further." },
+            { term: "Positive Income Elasticity", definition: "Indicates a normal good, where demand increases as income increases." },
+            { term: "Negative Income Elasticity", definition: "Indicates an inferior good, where demand decreases as income increases." },
+            { term: "Zero Income Elasticity", definition: "Indicates a neutral good (like salt), where demand does not change with income." },
+            { term: "Positive Cross Elasticity", definition: "Indicates that two goods are substitutes (e.g., tea and coffee)." },
+            { term: "Negative Cross Elasticity", definition: "Indicates that two goods are complements (e.g., car and petrol)." },
+            { term: "Zero Cross Elasticity", definition: "Indicates that two goods are unrelated." },
+            { term: "Total Outlay Method", definition: "A method to measure price elasticity by comparing the change in total expenditure (Price x Quantity) before and after the price change." },
+            { term: "Point Method", definition: "A geometric method to measure price elasticity at a specific point on the demand curve. Formula: Lower segment / Upper segment." },
+            { term: "Arc Method", definition: "A method to calculate price elasticity over a range or arc of the demand curve, using the average of prices and quantities." },
+            { term: "Determinants of Elasticity", definition: "Factors influencing price elasticity, such as availability of substitutes, nature of the commodity, and proportion of income spent." },
+            { term: "Necessities", definition: "Goods essential for living (e.g., food, medicine), which typically have inelastic demand." },
+            { term: "Luxuries", definition: "Goods that are not essential but are desired (e.g., sports cars), which typically have elastic demand." },
+            { term: "Availability of Substitutes", definition: "The more substitutes a good has, the more elastic its demand." },
+            { term: "Proportion of Income", definition: "Goods that take up a small proportion of a consumer's income (like a matchbox) tend to have inelastic demand." },
+            { term: "Time Period", definition: "Demand tends to be more elastic over a longer period as consumers have more time to adjust their behavior." },
+            { term: "Number of Uses", definition: "A commodity with multiple uses (like electricity) will have a more elastic demand." },
+            { term: "Habitual Goods", definition: "Goods for which consumers are habituated (e.g., cigarettes) tend to have inelastic demand." },
+            { term: "Importance to Businessmen", definition: "Elasticity helps firms in price determination and maximizing revenue." },
+            { term: "Importance to Government", definition: "Elasticity helps the government in formulating tax policies. Taxes are usually higher on goods with inelastic demand." },
+            { term: "Importance in Factor Pricing", definition: "The concept of elasticity helps in determining the rewards for factors of production." },
+            { term: "Importance in Foreign Trade", definition: "Governments can decide on devaluation or revaluation of currency based on the elasticity of demand for its exports and imports." },
         ],
         mcqs: [
-            { question: "The relationship between price and quantity demanded is typically:", options: ["Direct", "Inverse", "No relationship", "Constant"], answer: "Inverse" },
-            { question: "A movement along the demand curve is caused by a change in:", options: ["Income", "Tastes", "The price of the good itself", "Price of related goods"], answer: "The price of the good itself" },
-            { question: "If the price of coffee increases, the demand for tea (a substitute) will:", options: ["Decrease", "Increase", "Remain unchanged", "Become zero"], answer: "Increase" },
-            { question: "Goods that are consumed together are called:", options: ["Inferior goods", "Normal goods", "Substitute goods", "Complementary goods"], answer: "Complementary goods" },
-            { question: "For a Giffen good, the demand curve is:", options: ["Downward sloping", "Upward sloping", "Horizontal", "Vertical"], answer: "Upward sloping" },
-            { question: "A shift of the demand curve to the right indicates:", options: ["A decrease in demand", "An expansion of demand", "An increase in demand", "A contraction of demand"], answer: "An increase in demand" },
-            { question: "The measure of responsiveness of quantity demanded to a price change is:", options: ["Price Elasticity of Supply", "Income Elasticity", "Cross Elasticity", "Price Elasticity of Demand"], answer: "Price Elasticity of Demand" },
+            { question: "Price Elasticity of Demand measures the responsiveness of quantity demanded to a change in:", options: ["Income", "Price", "Tastes", "Supply"], answer: "Price" },
             { question: "If Ed = 0, the demand is:", options: ["Perfectly elastic", "Perfectly inelastic", "Unitary elastic", "Relatively elastic"], answer: "Perfectly inelastic" },
             { question: "For luxury goods, the price elasticity of demand is typically:", options: ["Less than 1", "Equal to 1", "Greater than 1", "Zero"], answer: "Greater than 1" },
             { question: "If a 10% rise in price leads to a 5% fall in quantity demanded, demand is:", options: ["Elastic", "Inelastic", "Unitary elastic", "Perfectly elastic"], answer: "Inelastic" },
             { question: "A vertical demand curve represents:", options: ["Perfectly elastic demand", "Unitary elastic demand", "Perfectly inelastic demand", "Relatively elastic demand"], answer: "Perfectly inelastic demand" },
-            { question: "Which of these is NOT a determinant of demand?", options: ["Price of inputs", "Consumer income", "Tastes and preferences", "Population size"], answer: "Price of inputs" },
-            { question: "An 'expansion of demand' means:", options: ["A shift in the demand curve", "More is demanded at the same price", "More is demanded due to a fall in price", "Less is demanded at a higher price"], answer: "More is demanded due to a fall in price" },
             { question: "The Total Outlay method of measuring elasticity was introduced by:", options: ["Adam Smith", "J.M. Keynes", "Alfred Marshall", "David Ricardo"], answer: "Alfred Marshall" },
             { question: "Cross elasticity of demand for substitute goods is:", options: ["Positive", "Negative", "Zero", "Infinite"], answer: "Positive" },
-            { question: "Veblen goods are also known as:", options: ["Inferior goods", "Normal goods", "Prestige goods", "Giffen goods"], answer: "Prestige goods" },
-            { question: "A fall in the price of a complementary good will cause the demand for the other good to:", options: ["Fall", "Rise", "Stay the same", "Vanish"], answer: "Rise" },
+            { question: "If total expenditure increases after a price fall, the demand is:", options: ["Inelastic", "Unitary elastic", "Elastic", "Perfectly inelastic"], answer: "Elastic" },
+            { question: "A horizontal demand curve signifies that elasticity is:", options: ["Zero", "One", "Infinite", "Less than one"], answer: "Infinite" },
+            { question: "Income elasticity of demand for inferior goods is:", options: ["Positive", "Negative", "Zero", "Greater than one"], answer: "Negative" },
+            { question: "The point method of measuring elasticity applies to:", options: ["A linear demand curve", "A non-linear demand curve", "Both A and B", "None of the above"], answer: "Both A and B" },
+            { question: "Demand for necessities like salt and medicine is generally:", options: ["Elastic", "Inelastic", "Perfectly elastic", "Unitary"], answer: "Inelastic" },
+            { question: "If two goods are complements, their cross elasticity of demand will be:", options: ["Positive", "Zero", "Negative", "One"], answer: "Negative" },
+            { question: "When the percentage change in quantity demanded is exactly equal to the percentage change in price, Ed is:", options: ["0", "1", "> 1", "< 1"], answer: "1" },
+            { question: "Which factor does NOT affect the elasticity of demand?", options: ["Nature of the commodity", "Availability of substitutes", "State of technology", "Number of uses"], answer: "State of technology" },
+            { question: "In the long run, the elasticity of demand for a good is generally:", options: ["Lower", "Higher", "The same", "Zero"], answer: "Higher" },
+            { question: "A government would prefer to tax goods with:", options: ["Elastic demand", "Inelastic demand", "Unitary elastic demand", "Perfectly elastic demand"], answer: "Inelastic demand" },
         ]
     },
-    4: {
+    5: {
         summary: "Supply analysis examines the behavior of producers. 'Supply' refers to the quantity of a commodity that a producer is willing and able to offer for sale at a given price. The Law of Supply posits a direct relationship between price and quantity supplied, meaning producers are willing to sell more at higher prices. This results in an upward-sloping supply curve. A change in price causes a movement along the supply curve (expansion or contraction), while changes in other determinants—such as technology, input prices, or government policies—cause the entire curve to shift (increase or decrease). The concept of 'Cost and Revenue' is central, with Total Cost (TC), Average Cost (AC), and Marginal Cost (MC) influencing supply decisions. Revenue concepts include Total Revenue (TR), Average Revenue (AR), and Marginal Revenue (MR). Producers aim to maximize profit, which is the difference between total revenue and total cost.",
         mustKnow: [
             "Supply is the quantity a producer is willing and able to sell.",
@@ -281,14 +351,21 @@ export const studyMaterials: Record<number, StudyMaterials> = {
             { question: "Average Revenue (AR) is always equal to:", options: ["Marginal Revenue", "Price", "Total Cost", "Profit"], answer: "Price" },
             { question: "A firm achieves equilibrium (profit maximization) when:", options: ["MR > MC", "MR < MC", "MR = MC", "TR = TC"], answer: "MR = MC" },
             { question: "A vertical supply curve represents:", options: ["Perfectly elastic supply", "Perfectly inelastic supply", "Unitary elastic supply", "Relatively elastic supply"], answer: "Perfectly inelastic supply" },
-            { question: "'Stock' is a concept related to:", options: ["A period of time", "A point in time", "Flow", "Demand"], answer: "'A point in time'" },
+            { question: "'Stock' is a concept related to:", options: ["A period of time", "A point in time", "Flow", "Demand"], answer: "A point in time" },
             { question: "If the cost of raw materials increases, the supply curve will:", options: ["Shift to the right", "Shift to the left", "Remain unchanged", "Become steeper"], answer: "Shift to the left" },
             { question: "An 'expansion of supply' refers to:", options: ["A rightward shift of the supply curve", "More quantity supplied at a higher price", "More quantity supplied at the same price", "A new firm entering the market"], answer: "More quantity supplied at a higher price" },
             { question: "For perishable goods, the supply is generally:", options: ["Elastic", "Inelastic", "Perfectly elastic", "Unitary elastic"], answer: "Inelastic" },
             { question: "Which of the following costs is also known as 'overhead cost'?", options: ["Variable Cost", "Fixed Cost", "Marginal Cost", "Total Cost"], answer: "Fixed Cost" },
+            { question: "The relationship between price and quantity supplied is:", options: ["Inverse", "Direct", "No relation", "Negative"], answer: "Direct" },
+            { question: "A 'decrease in supply' is caused by:", options: ["A fall in price", "A rise in price", "Unfavourable changes in other factors", "Favourable changes in other factors"], answer: "Unfavourable changes in other factors" },
+            { question: "Supply is a _______ concept.", options: ["Flow", "Stock", "Static", "Relative"], answer: "Flow" },
+            { question: "The MC curve cuts the AC curve at its ________ point.", options: ["Maximum", "Minimum", "Initial", "Final"], answer: "Minimum" },
+            { question: "If a tax is imposed on a product, its supply will:", options: ["Increase", "Decrease", "Remain the same", "Become zero"], answer: "Decrease" },
+            { question: "The time period plays a crucial role in determining the:", options: ["Elasticity of demand", "Elasticity of supply", "Utility", "Cost"], answer: "Elasticity of supply" },
+            { question: "In the long run, the supply of a commodity is generally:", options: ["Perfectly inelastic", "Inelastic", "Elastic", "Perfectly elastic"], answer: "Elastic" },
         ]
     },
-    5: {
+    6: {
         summary: "Market structure describes the competitive environment in which firms operate. The main forms are Perfect Competition, Monopoly, Oligopoly, and Monopolistic Competition. Perfect Competition features a large number of buyers and sellers, a homogeneous product, free entry and exit, and perfect knowledge; firms are price takers. Monopoly is the opposite, with a single seller, a unique product with no close substitutes, and high barriers to entry; the firm is a price maker. Oligopoly is characterized by a few dominant firms whose decisions are interdependent, often leading to strategic behavior like price wars or collusion. Monopolistic Competition involves many firms selling differentiated products, leading to competition on factors like branding and quality, not just price.",
         mustKnow: [
             "Perfect Competition: Many firms, homogeneous product, price takers.",
@@ -348,9 +425,11 @@ export const studyMaterials: Record<number, StudyMaterials> = {
             { question: "In perfect competition, the condition for profit maximization is P = ?", options: ["AC", "AR", "MC", "TC"], answer: "MC" },
             { question: "A natural monopoly occurs when:", options: ["A firm owns a natural resource", "There are high economies of scale", "The government grants a patent", "There are many small firms"], answer: "There are high economies of scale" },
             { question: "The practice of charging different prices for the same product is known as:", options: ["Price competition", "Price discrimination", "Price rigidity", "Price leadership"], answer: "Price discrimination" },
+            { question: "In a monopoly, the firm and the industry are:", options: ["Different", "The same", "Related", "Unrelated"], answer: "The same" },
+            { question: "Which market form is also known as 'competitive monopoly'?", options: ["Oligopoly", "Perfect Competition", "Monopoly", "Monopolistic Competition"], answer: "Monopolistic Competition" },
         ]
     },
-    6: {
+    7: {
         summary: "Index numbers are statistical tools used to measure relative changes in a group of variables over time. They are essential for economic analysis, particularly for tracking inflation, production levels, and other economic trends. Key types include Price Index Numbers (like the Consumer Price Index - CPI), which measure changes in prices; Quantity Index Numbers, which measure changes in physical volume; and Value Index Numbers, which measure changes in the total value (Price x Quantity). The construction of an index number involves selecting a base year, choosing a representative 'basket' of items, assigning weights to these items based on their importance, and selecting an appropriate formula (e.g., Laspeyres', Paasche's, or Fisher's). While powerful, index numbers have limitations, as they are only averages and may not perfectly reflect changes in quality or consumption patterns.",
         mustKnow: [
             "An index number is a statistical tool for measuring relative change.",
@@ -410,9 +489,10 @@ export const studyMaterials: Record<number, StudyMaterials> = {
             { question: "The formula for Value Index is:", options: ["Σp₁/Σp₀ * 100", "Σq₁/Σq₀ * 100", "Σp₁q₁/Σp₀q₀ * 100", "Σp₁q₀/Σp₀q₀ * 100"], answer: "Σp₁q₁/Σp₀q₀ * 100" },
             { question: "Which index uses current year quantities as weights?", options: ["Laspeyres'", "Paasche's", "Marshall-Edgeworth", "Simple Aggregative"], answer: "Paasche's" },
             { question: "A major limitation of index numbers is that they are:", options: ["Completely accurate", "Based on a small sample", "Only averages and may hide details", "Too complex to calculate"], answer: "Only averages and may hide details" },
+            { question: "The purchasing power of money is _________ to the price index.", options: ["Directly proportional", "Inversely proportional", "Not related", "Equal"], answer: "Inversely proportional" },
         ]
     },
-    7: {
+    8: {
         summary: "National Income is the total monetary value of all final goods and services produced in a country during a financial year. It's a key indicator of economic performance. There are three main methods to measure it: the Output or Production Method (summing up the net value added by all producing units), the Income Method (summing up all factor incomes like rent, wages, interest, and profit), and the Expenditure Method (summing up all final expenditure on consumption, investment, government spending, and net exports). Key concepts include Gross Domestic Product (GDP), Gross National Product (GNP), Net National Product (NNP), and Per Capita Income. Difficulties in measurement arise from issues like the black economy, non-monetized transactions, and obtaining reliable data.",
         mustKnow: [
             "National Income is the total value of all final goods and services produced in a year.",
@@ -472,9 +552,10 @@ export const studyMaterials: Record<number, StudyMaterials> = {
             { question: "Green GNP is a concept that accounts for:", options: ["Agricultural production", "Environmental degradation", "Industrial output", "Service sector growth"], answer: "Environmental degradation" },
             { question: "Which organization estimates National Income in India?", options: ["Reserve Bank of India (RBI)", "Ministry of Finance", "Central Statistical Organisation (CSO)", "NITI Aayog"], answer: "Central Statistical Organisation (CSO)" },
             { question: "The problem of the non-monetized sector is a major issue in measuring national income in which type of economy?", options: ["Developed economies", "Socialist economies", "Developing economies", "Closed economies"], answer: "Developing economies" },
+            { question: "What is GDP at Factor Cost?", options: ["GDP at Market Price - Net Indirect Taxes", "GDP at Market Price + Net Indirect Taxes", "GNP - Depreciation", "NNP + Subsidies"], answer: "GDP at Market Price - Net Indirect Taxes" },
         ]
     },
-    8: {
+    9: {
         summary: "Public Finance deals with the income and expenditure of the government. It has two main components: Public Revenue and Public Expenditure. Public Revenue refers to the government's sources of income, which are categorized into Tax Revenue (like income tax, GST) and Non-Tax Revenue (like fees, fines, and profits from public sector enterprises). Public Expenditure is the spending by the government, classified into Revenue Expenditure (recurring, day-to-day expenses) and Capital Expenditure (creation of assets). The government's annual financial statement is the Budget, which outlines planned revenue and expenditure. A budget can be balanced, surplus, or deficit. Understanding these components is key to analyzing the government's role in the economy.",
         mustKnow: [
             "Public Finance is the study of the government's revenue and expenditure.",
@@ -536,7 +617,7 @@ export const studyMaterials: Record<number, StudyMaterials> = {
             { question: "The sale of shares of a Public Sector Undertaking (PSU) by the government is called:", options: ["Investment", "Disinvestment", "Nationalization", "Privatization"], answer: "Disinvestment" },
         ]
     },
-    9: {
+    10: {
         summary: "India's financial system is composed of the Money Market and the Capital Market. The Money Market deals with short-term borrowing and lending, with maturities ranging from a day to a year. It is regulated by the Reserve Bank of India (RBI) and includes instruments like Treasury Bills, Commercial Papers, and Certificates of Deposit. It provides liquidity to the financial system. The Capital Market, on the other hand, is for long-term funds (more than a year). It includes the stock market (for equities) and the bond market (for debt), and is regulated by the Securities and Exchange Board of India (SEBI). It mobilizes savings and channels them into productive investments.",
         mustKnow: [
             "The financial system has two parts: Money Market and Capital Market.",
@@ -598,7 +679,7 @@ export const studyMaterials: Record<number, StudyMaterials> = {
             { question: "A Demat account is used to:", options: ["Hold cash", "Hold physical shares", "Hold securities in electronic form", "Trade commodities"], answer: "Hold securities in electronic form" },
         ]
     },
-    10: {
+    11: {
         summary: "Foreign trade involves the exchange of goods and services between countries. It is composed of exports (goods sold to other countries) and imports (goods bought from other countries). The 'Composition of foreign trade' refers to the types of goods and services being traded, while the 'Direction of foreign trade' refers to the countries we trade with. The Balance of Payments (BOP) is a systematic record of all economic transactions between residents of a country and the rest of the world over a period. It has two main components: the Current Account (which records trade in goods and services, and transfer payments) and the Capital Account (which records transactions in financial assets). Understanding these concepts is crucial for analyzing a country's external economic health.",
         mustKnow: [
             "Foreign Trade = Exports + Imports.",
