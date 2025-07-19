@@ -9,10 +9,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { studyMaterials } from '@/data/study-materials';
 import { chapters } from '@/data/chapters';
-import { Layers, ListChecks, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
+import { Layers, ListChecks, CheckCircle, XCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type Flashcard = {
   term: string;
@@ -25,7 +24,21 @@ type MCQ = {
   answer: string;
 };
 
-const FlashcardWidget = ({ card, chapterId, onNext }: { card: Flashcard; chapterId: number; onNext: () => void }) => {
+type AllContent<T> = {
+    item: T;
+    chapterId: number;
+}
+
+const allFlashcards: AllContent<Flashcard>[] = chapters.flatMap(chapter =>
+    studyMaterials[chapter.id]?.flashcards.map(card => ({ item: card, chapterId: chapter.id })) || []
+);
+
+const allMcqs: AllContent<MCQ>[] = chapters.flatMap(chapter =>
+    studyMaterials[chapter.id]?.mcqs.map(mcq => ({ item: mcq, chapterId: chapter.id })) || []
+);
+
+
+const FlashcardWidget = ({ card, chapterId, onNext, onPrev, currentIndex, totalCount }: { card: Flashcard; chapterId: number; onNext: () => void; onPrev: () => void; currentIndex: number; totalCount: number; }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
   useEffect(() => {
@@ -58,17 +71,23 @@ const FlashcardWidget = ({ card, chapterId, onNext }: { card: Flashcard; chapter
           </div>
         </motion.div>
       </div>
-      <Button variant="outline" size="sm" onClick={onNext} className="mt-4 w-full">
-        <RefreshCw className="mr-2 h-4 w-4"/> New Card
-      </Button>
+      <div className="flex items-center justify-between mt-4">
+        <Button variant="outline" size="sm" onClick={onPrev} disabled={currentIndex === 0}>
+            <ArrowLeft className="mr-2 h-4 w-4"/> Prev
+        </Button>
+        <p className="text-sm text-muted-foreground">{currentIndex + 1} / {totalCount}</p>
+        <Button variant="outline" size="sm" onClick={onNext} disabled={currentIndex === totalCount - 1}>
+            Next <ArrowRight className="ml-2 h-4 w-4"/>
+        </Button>
+      </div>
     </div>
   );
 };
 
-const McqWidget = ({ mcq, chapterId, onNext }: { mcq: MCQ, chapterId: number, onNext: () => void }) => {
+const McqWidget = ({ mcq, chapterId, onNext, onPrev, currentIndex, totalCount }: { mcq: MCQ, chapterId: number, onNext: () => void, onPrev: () => void; currentIndex: number; totalCount: number; }) => {
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
-    
+
     useEffect(() => {
         setSelectedAnswer(null);
         setSubmitted(false);
@@ -81,13 +100,21 @@ const McqWidget = ({ mcq, chapterId, onNext }: { mcq: MCQ, chapterId: number, on
         if (option === selectedAnswer && option !== correctAnswer) return "text-red-600 dark:text-red-400";
         return "";
     };
-    
+
     const getIcon = (option: string) => {
         if (!submitted) return null;
         const correctAnswer = mcq.answer;
         if (option === correctAnswer) return <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />;
         if (option === selectedAnswer && option !== correctAnswer) return <XCircle className="h-5 w-5 text-red-600 dark:text-red-400" />;
         return null;
+    }
+
+    const handleNext = () => {
+        if (submitted) {
+            onNext();
+        } else {
+            setSubmitted(true);
+        }
     }
 
     return (
@@ -114,105 +141,74 @@ const McqWidget = ({ mcq, chapterId, onNext }: { mcq: MCQ, chapterId: number, on
                     ))}
                 </RadioGroup>
             </CardContent>
-            <div className="p-6 pt-0">
-                {!submitted ? (
-                    <Button onClick={() => setSubmitted(true)} disabled={!selectedAnswer} className="w-full">Check Answer</Button>
-                ) : (
-                    <Button onClick={onNext} className="w-full">Next Question <RefreshCw className="ml-2 w-4 h-4"/> </Button>
-                )}
+            <div className="p-6 pt-0 flex items-center justify-between">
+                 <Button variant="outline" size="sm" onClick={onPrev} disabled={currentIndex === 0}>
+                    <ArrowLeft className="mr-2 h-4 w-4"/> Prev
+                </Button>
+                <p className="text-sm text-muted-foreground">{currentIndex + 1} / {totalCount}</p>
+                 <Button onClick={handleNext} disabled={!selectedAnswer && !submitted}>
+                    {submitted ? "Next" : "Check"} <ArrowRight className="ml-2 w-4 h-4"/>
+                </Button>
             </div>
         </Card>
     );
 };
 
-const getRandomItem = <T,>(items: T[]): T | undefined => {
-    if (!items || items.length === 0) return undefined;
-    return items[Math.floor(Math.random() * items.length)];
-};
-
-const getRandomItemFromChapter = <T,>(chapterId: number, itemSelector: (material: typeof studyMaterials[number]) => T[]) => {
-    const materials = studyMaterials[chapterId];
-    if (!materials) return undefined;
-    
-    const items = itemSelector(materials);
-    return getRandomItem(items);
-}
 
 export default function DashboardWidgets() {
-    const [selectedFlashcardChapter, setSelectedFlashcardChapter] = useState(chapters[0].id);
-    const [selectedMcqChapter, setSelectedMcqChapter] = useState(chapters[0].id);
+    const [flashcardIndex, setFlashcardIndex] = useState(0);
+    const [mcqIndex, setMcqIndex] = useState(0);
 
-    const [randomFlashcard, setRandomFlashcard] = useState<{card: Flashcard, chapterId: number} | null>(null);
-    const [randomMcq, setRandomMcq] = useState<{mcq: MCQ, chapterId: number} | null>(null);
+    const currentFlashcardData = allFlashcards[flashcardIndex];
+    const currentMcqData = allMcqs[mcqIndex];
 
-    const selectNewFlashcard = () => {
-        const card = getRandomItemFromChapter(selectedFlashcardChapter, m => m.flashcards);
-        if (card) {
-            setRandomFlashcard({ card, chapterId: selectedFlashcardChapter });
-        }
-    };
-    
-    const selectNewMcq = () => {
-        const mcq = getRandomItemFromChapter(selectedMcqChapter, m => m.mcqs);
-        if (mcq) {
-            setRandomMcq({ mcq, chapterId: selectedMcqChapter });
-        }
+    const handleNextFlashcard = () => {
+        setFlashcardIndex(prev => Math.min(prev + 1, allFlashcards.length - 1));
     };
 
-    useEffect(() => {
-        selectNewFlashcard();
-    }, [selectedFlashcardChapter]);
+    const handlePrevFlashcard = () => {
+        setFlashcardIndex(prev => Math.max(prev - 1, 0));
+    };
 
-    useEffect(() => {
-        selectNewMcq();
-    }, [selectedMcqChapter]);
+    const handleNextMcq = () => {
+        setMcqIndex(prev => Math.min(prev + 1, allMcqs.length - 1));
+    };
+
+    const handlePrevMcq = () => {
+        setMcqIndex(prev => Math.max(prev - 1, 0));
+    };
+
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div>
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
             <h3 className="flex items-center text-2xl font-bold font-headline"><Layers className="mr-3 text-primary"/> Flashcard Review</h3>
-            <Select
-                value={selectedFlashcardChapter.toString()}
-                onValueChange={(value) => setSelectedFlashcardChapter(Number(value))}
-            >
-                <SelectTrigger className="w-full sm:w-[280px]">
-                    <SelectValue placeholder="Select a chapter" />
-                </SelectTrigger>
-                <SelectContent>
-                    {chapters.map(chapter => (
-                        <SelectItem key={chapter.id} value={chapter.id.toString()}>
-                            Chapter {chapter.id}: {chapter.title}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
         </div>
-         {randomFlashcard ? (
-            <FlashcardWidget card={randomFlashcard.card} chapterId={randomFlashcard.chapterId} onNext={selectNewFlashcard} />
+         {currentFlashcardData ? (
+            <FlashcardWidget
+                card={currentFlashcardData.item}
+                chapterId={currentFlashcardData.chapterId}
+                onNext={handleNextFlashcard}
+                onPrev={handlePrevFlashcard}
+                currentIndex={flashcardIndex}
+                totalCount={allFlashcards.length}
+            />
          ) : <p>Loading...</p>}
       </div>
       <div>
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
             <h3 className="flex items-center text-2xl font-bold font-headline"><ListChecks className="mr-3 text-primary"/> MCQ Challenge</h3>
-             <Select
-                value={selectedMcqChapter.toString()}
-                onValueChange={(value) => setSelectedMcqChapter(Number(value))}
-            >
-                <SelectTrigger className="w-full sm:w-[280px]">
-                    <SelectValue placeholder="Select a chapter" />
-                </SelectTrigger>
-                <SelectContent>
-                    {chapters.map(chapter => (
-                        <SelectItem key={chapter.id} value={chapter.id.toString()}>
-                            Chapter {chapter.id}: {chapter.title}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
         </div>
-        {randomMcq ? (
-            <McqWidget mcq={randomMcq.mcq} chapterId={randomMcq.chapterId} onNext={selectNewMcq}/>
+        {currentMcqData ? (
+            <McqWidget
+                mcq={currentMcqData.item}
+                chapterId={currentMcqData.chapterId}
+                onNext={handleNextMcq}
+                onPrev={handlePrevMcq}
+                currentIndex={mcqIndex}
+                totalCount={allMcqs.length}
+            />
         ) : <p>Loading...</p>}
       </div>
     </div>
