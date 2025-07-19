@@ -8,6 +8,7 @@ import { studyMaterials } from '@/data/study-materials';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
 import { FileText, Layers, BookOpen, Search as SearchIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type SearchResult = {
     type: 'Chapter' | 'Flashcard' | 'Note';
@@ -122,9 +123,9 @@ function SearchComponent() {
                         <Link href={result.link} key={index} passHref>
                            <Card className="hover:shadow-md transition-shadow cursor-pointer">
                                 <CardHeader>
-                                    <div className="flex items-center gap-3">
-                                        {getIcon(result.type)}
-                                        <CardTitle className="text-lg">{result.title}</CardTitle>
+                                    <div className="flex items-start gap-3">
+                                        <span className="flex-shrink-0">{getIcon(result.type)}</span>
+                                        <CardTitle className="text-lg truncate">{result.title}</CardTitle>
                                     </div>
                                     <CardDescription>
                                         Found in <span className="font-semibold">{result.type}</span> from Chapter {result.chapterId}
@@ -171,9 +172,9 @@ function SearchHeader() {
     const searchParams = useSearchParams();
     const query = searchParams.get('q');
     return (
-        <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary flex items-center justify-center gap-4">
-            <SearchIcon className="w-10 h-10" />
-            Search Results for "{query}"
+        <h1 className="font-headline text-3xl md:text-5xl font-bold text-primary flex items-center justify-center gap-4 flex-wrap">
+            <SearchIcon className="w-8 h-8 md:w-10 md:h-10" />
+            <span>Search Results for "{query}"</span>
         </h1>
     )
 }
