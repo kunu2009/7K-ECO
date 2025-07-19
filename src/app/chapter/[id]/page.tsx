@@ -46,7 +46,7 @@ export default function ChapterPage({ params }: ChapterPageProps) {
 
 
   return (
-    <div className={cn("min-h-screen bg-background", !isReelsActive && "p-4 md:p-8")}>
+    <div className={cn("min-h-screen bg-background", { "p-4 md:p-8": !isReelsActive })}>
       <div className={cn(isReelsActive && "hidden")}>
         <ChapterHeader title={chapter.title} />
       </div>
