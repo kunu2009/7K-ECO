@@ -145,7 +145,7 @@ export default function MockTestClient() {
         <div className="max-w-5xl mx-auto">
             <div className="bg-card p-4 rounded-lg shadow-md sticky top-4 z-20 flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
                 <h2 className="text-xl font-bold text-primary">Mock Paper</h2>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
                     <div className="flex items-center gap-2 font-mono text-lg font-bold bg-destructive text-destructive-foreground px-3 py-1 rounded-md">
                         <Timer className="w-5 h-5"/>
                         {formatTime(timeLeft)}
