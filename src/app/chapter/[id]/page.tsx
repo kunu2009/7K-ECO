@@ -1,3 +1,4 @@
+
 import { chapters } from '@/data/chapters';
 import { notFound } from 'next/navigation';
 import {
@@ -13,6 +14,7 @@ import McqSection from '@/components/McqSection';
 import MustKnowSection from '@/components/MustKnowSection';
 import ReelsSection from '@/components/ReelsSection';
 import { FileText, Layers, ListChecks, Star, PlayCircle } from 'lucide-react';
+import { studyMaterials } from '@/data/study-materials';
 
 type ChapterPageProps = {
   params: {
@@ -28,6 +30,8 @@ export default function ChapterPage({ params }: ChapterPageProps) {
     notFound();
   }
 
+  const materials = studyMaterials[chapterId];
+
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <ChapterHeader title={chapter.title} />
@@ -41,16 +45,16 @@ export default function ChapterPage({ params }: ChapterPageProps) {
             <TabsTrigger value="reels"><PlayCircle className="w-4 h-4 mr-2"/>Reels</TabsTrigger>
           </TabsList>
           <TabsContent value="summary" className="mt-6">
-            <SummarySection chapterContent={chapter.content} />
+            <SummarySection summary={materials.summary} />
           </TabsContent>
           <TabsContent value="flashcards" className="mt-6">
-            <FlashcardSection chapterContent={chapter.content} />
+            <FlashcardSection flashcards={materials.flashcards} />
           </TabsContent>
           <TabsContent value="mcqs" className="mt-6">
-             <McqSection chapterContent={chapter.content} />
+             <McqSection mcqs={materials.mcqs} />
           </TabsContent>
           <TabsContent value="must-know" className="mt-6">
-            <MustKnowSection chapterContent={chapter.content} />
+            <MustKnowSection mustKnow={materials.mustKnow} />
           </TabsContent>
           <TabsContent value="reels" className="mt-6">
             <ReelsSection />

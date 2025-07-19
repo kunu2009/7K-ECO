@@ -1,9 +1,8 @@
+
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { generateFlashcardsAction } from '@/app/actions';
-import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -12,7 +11,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
 
@@ -20,28 +18,6 @@ type Flashcard = {
   term: string;
   definition: string;
 };
-
-const FlashcardSkeleton = () => (
-    <Carousel className="w-full max-w-xl mx-auto">
-        <CarouselContent>
-            {Array.from({ length: 3 }).map((_, index) => (
-                <CarouselItem key={index}>
-                    <div className="p-1">
-                        <Card className="h-80">
-                            <CardContent className="flex flex-col items-center justify-center p-6 h-full">
-                                <Skeleton className="h-8 w-3/4 mb-4" />
-                                <Skeleton className="h-4 w-1/2" />
-                            </CardContent>
-                        </Card>
-                    </div>
-                </CarouselItem>
-            ))}
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-    </Carousel>
-);
-
 
 const FlashcardComponent = ({ card }: { card: Flashcard }) => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -78,46 +54,15 @@ const FlashcardComponent = ({ card }: { card: Flashcard }) => {
 };
 
 
-export default function FlashcardSection({ chapterContent }: { chapterContent: string }) {
-  const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    const fetchFlashcards = async () => {
-      setLoading(true);
-      setError(null);
-      const result = await generateFlashcardsAction(chapterContent);
-
-      if (result.success && result.data) {
-        setFlashcards(result.data);
-      } else {
-        setError(result.error || 'An unknown error occurred.');
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: result.error || "Failed to generate flashcards.",
-        });
-      }
-      setLoading(false);
-    };
-
-    fetchFlashcards();
-  }, [chapterContent, toast]);
-
-  if (loading) {
-    return <FlashcardSkeleton />;
-  }
-
-  if (error) {
+export default function FlashcardSection({ flashcards }: { flashcards: Flashcard[] }) {
+  if (!flashcards || flashcards.length === 0) {
     return (
-        <Alert variant="destructive">
-            <Terminal className="h-4 w-4" />
-            <AlertTitle>Generation Failed</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-        </Alert>
-    )
+      <Alert variant="destructive">
+        <Terminal className="h-4 w-4" />
+        <AlertTitle>Content Not Found</AlertTitle>
+        <AlertDescription>No flashcards available for this chapter.</AlertDescription>
+      </Alert>
+    );
   }
 
   return (
