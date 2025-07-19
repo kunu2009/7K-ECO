@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -61,6 +62,7 @@ const SheetContent = React.forwardRef<
     <SheetOverlay />
     <SheetPrimitive.Content
       ref={ref}
+      onOpenAutoFocus={(e) => e.preventDefault()}
       className={cn(sheetVariants({ side }), className)}
       {...props}
     >
