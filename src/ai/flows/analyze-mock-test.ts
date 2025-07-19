@@ -1,10 +1,7 @@
+
 'use server';
 /**
  * @fileOverview An AI flow to analyze mock test results and generate personalized feedback.
- *
- * - analyzeMockTest - A function that takes incorrect questions and returns a study plan.
- * - AnalyzeTestInput - The input type for the analyzeMockTest function.
- * - AnalyzeTestOutput - The return type for the analyzeMockTest function.
  */
 
 import {ai} from '@/ai/genkit';
