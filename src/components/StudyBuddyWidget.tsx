@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
@@ -46,28 +47,29 @@ const StudyBuddyWidget = () => {
             </header>
             <ScrollArea className="flex-1 p-4 bg-background" ref={scrollAreaRef}>
               <div className="space-y-4">
-                {messages.length === 0 && (
+                {!messages || messages.length === 0 ? (
                     <div className="text-center text-sm text-muted-foreground p-4">
                         <p>Hi there! I'm Eco. 👋</p>
                         <p>Ask me anything about 12th-grade economics!</p>
                     </div>
-                )}
-                {messages.map((m) => (
-                  <div key={m.id} className={cn("flex items-start gap-3", m.role === 'user' ? 'justify-end' : 'justify-start')}>
-                    {m.role === 'assistant' && <Bot className="w-6 h-6 text-primary flex-shrink-0" />}
-                    <div
-                      className={cn(
-                        'p-3 rounded-lg max-w-[80%]',
-                        m.role === 'user'
-                          ? 'bg-primary/20 text-primary-foreground'
-                          : 'bg-card text-card-foreground'
-                      )}
-                    >
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap">{m.content}</p>
+                ) : (
+                  messages.map((m) => (
+                    <div key={m.id} className={cn("flex items-start gap-3", m.role === 'user' ? 'justify-end' : 'justify-start')}>
+                      {m.role === 'assistant' && <Bot className="w-6 h-6 text-primary flex-shrink-0" />}
+                      <div
+                        className={cn(
+                          'p-3 rounded-lg max-w-[80%]',
+                          m.role === 'user'
+                            ? 'bg-primary/20 text-primary-foreground'
+                            : 'bg-card text-card-foreground'
+                        )}
+                      >
+                        <p className="text-sm leading-relaxed whitespace-pre-wrap">{m.content}</p>
+                      </div>
+                      {m.role === 'user' && <User className="w-6 h-6 text-muted-foreground flex-shrink-0" />}
                     </div>
-                     {m.role === 'user' && <User className="w-6 h-6 text-muted-foreground flex-shrink-0" />}
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </ScrollArea>
             <form onSubmit={handleSubmit} className="p-4 border-t bg-card rounded-b-lg">

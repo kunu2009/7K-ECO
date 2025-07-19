@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, Home, Timer, User, Bookmark, Search } from "lucide-react";
+import { BookOpen, Home, Timer, User, Bookmark, Search, Gamepad } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -101,6 +101,19 @@ export default function AppSidebar() {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
+
+            <SidebarMenuItem>
+                <SidebarMenuButton
+                asChild
+                isActive={pathname === "/policy-game"}
+                tooltip={{ children: "Policy Game" }}
+                >
+                <Link href="/policy-game" onClick={handleLinkClick}>
+                    <Gamepad />
+                    <span>Policy Game</span>
+                </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
 
           <SidebarMenuItem>
             <SidebarMenuButton
