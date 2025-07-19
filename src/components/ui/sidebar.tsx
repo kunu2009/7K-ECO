@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -334,18 +335,26 @@ SidebarInset.displayName = "SidebarInset"
 
 const SidebarInput = React.forwardRef<
   React.ElementRef<typeof Input>,
-  React.ComponentProps<typeof Input>
->(({ className, ...props }, ref) => {
+  React.ComponentProps<typeof Input> & { icon?: React.ReactNode }
+>(({ className, icon, ...props }, ref) => {
   return (
-    <Input
-      ref={ref}
-      data-sidebar="input"
-      className={cn(
-        "h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
-        className
+    <div className="relative">
+      <Input
+        ref={ref}
+        data-sidebar="input"
+        className={cn(
+          "h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+          icon && "pl-8",
+          className
+        )}
+        {...props}
+      />
+      {icon && (
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5">
+          {icon}
+        </div>
       )}
-      {...props}
-    />
+    </div>
   )
 })
 SidebarInput.displayName = "SidebarInput"

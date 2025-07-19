@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { BookOpen } from 'lucide-react';
 import { chapters } from '@/data/chapters';

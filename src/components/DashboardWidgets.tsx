@@ -9,9 +9,19 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { studyMaterials } from '@/data/study-materials';
 import { chapters } from '@/data/chapters';
-import { Layers, ListChecks, CheckCircle, XCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Layers, ListChecks, CheckCircle, XCircle, ArrowLeft, ArrowRight, Bookmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
+
+type ContentType = 'flashcard' | 'mcq';
+
+export type BookmarkedItem = {
+    type: ContentType;
+    chapterId: number;
+    item: Flashcard | MCQ;
+    timestamp: number;
+}
 
 type Flashcard = {
   term: string;
@@ -37,9 +47,50 @@ const allMcqs: AllContent<MCQ>[] = chapters.flatMap(chapter =>
     studyMaterials[chapter.id]?.mcqs.map(mcq => ({ item: mcq, chapterId: chapter.id })) || []
 );
 
+const useBookmarks = () => {
+    const [bookmarks, setBookmarks] = useState<BookmarkedItem[]>([]);
+    const { toast } = useToast();
+
+    useEffect(() => {
+        try {
+            const savedBookmarks = localStorage.getItem('bookmarks');
+            if (savedBookmarks) {
+                setBookmarks(JSON.parse(savedBookmarks));
+            }
+        } catch (error) {
+            console.error("Could not load bookmarks", error);
+        }
+    }, []);
+
+    const saveBookmarks = (newBookmarks: BookmarkedItem[]) => {
+        setBookmarks(newBookmarks);
+        localStorage.setItem('bookmarks', JSON.stringify(newBookmarks));
+    };
+
+    const isBookmarked = (type: ContentType, chapterId: number, item: Flashcard | MCQ) => {
+        return bookmarks.some(b => b.type === type && b.chapterId === chapterId && JSON.stringify(b.item) === JSON.stringify(item));
+    };
+
+    const toggleBookmark = (type: ContentType, chapterId: number, item: Flashcard | MCQ) => {
+        let updatedBookmarks;
+        if (isBookmarked(type, chapterId, item)) {
+            updatedBookmarks = bookmarks.filter(b => !(b.type === type && b.chapterId === chapterId && JSON.stringify(b.item) === JSON.stringify(item)));
+            toast({ title: "Bookmark removed!" });
+        } else {
+            const newBookmark: BookmarkedItem = { type, chapterId, item, timestamp: Date.now() };
+            updatedBookmarks = [...bookmarks, newBookmark];
+            toast({ title: "Bookmark added!" });
+        }
+        saveBookmarks(updatedBookmarks);
+    };
+
+    return { bookmarks, isBookmarked, toggleBookmark };
+}
+
 
 const FlashcardWidget = ({ card, chapterId, onNext, onPrev, currentIndex, totalCount }: { card: Flashcard; chapterId: number; onNext: () => void; onPrev: () => void; currentIndex: number; totalCount: number; }) => {
   const [isFlipped, setIsFlipped] = useState(false);
+  const { isBookmarked, toggleBookmark } = useBookmarks();
 
   useEffect(() => {
     setIsFlipped(false);
@@ -47,6 +98,12 @@ const FlashcardWidget = ({ card, chapterId, onNext, onPrev, currentIndex, totalC
 
   return (
     <div className="h-full flex flex-col">
+       <div className="flex justify-between items-center mb-2">
+         <p className="text-muted-foreground text-sm">From <Link href={`/chapter/${chapterId}`} className="font-bold underline">Chapter {chapterId}</Link></p>
+         <Button variant="ghost" size="icon" onClick={() => toggleBookmark('flashcard', chapterId, card)} title="Bookmark card">
+             <Bookmark className={cn("w-5 h-5", isBookmarked('flashcard', chapterId, card) ? 'text-yellow-500 fill-yellow-400' : 'text-muted-foreground')} />
+         </Button>
+       </div>
       <div className="perspective flex-grow" onClick={() => setIsFlipped(!isFlipped)}>
         <motion.div
           className="relative h-64 w-full cursor-pointer preserve-3d"
@@ -56,7 +113,6 @@ const FlashcardWidget = ({ card, chapterId, onNext, onPrev, currentIndex, totalC
           <div className="absolute w-full h-full backface-hidden">
             <Card className="h-full bg-accent/20 border-accent">
               <CardContent className="flex flex-col items-center justify-center p-6 h-full text-center">
-                <p className="text-muted-foreground text-sm mb-2">Term from <Link href={`/chapter/${chapterId}`} className="font-bold underline">Chapter {chapterId}</Link></p>
                 <h3 className="text-xl font-bold font-headline text-accent-foreground">{card.term}</h3>
               </CardContent>
             </Card>
@@ -64,7 +120,6 @@ const FlashcardWidget = ({ card, chapterId, onNext, onPrev, currentIndex, totalC
           <div className="absolute w-full h-full backface-hidden rotate-y-180">
             <Card className="h-full bg-card border-border">
               <CardContent className="flex flex-col items-center justify-center p-6 h-full text-center">
-                <p className="text-muted-foreground text-sm mb-2">Definition</p>
                 <p className="text-md font-code text-foreground">{card.definition}</p>
               </CardContent>
             </Card>
@@ -87,6 +142,8 @@ const FlashcardWidget = ({ card, chapterId, onNext, onPrev, currentIndex, totalC
 const McqWidget = ({ mcq, chapterId, onNext, onPrev, currentIndex, totalCount }: { mcq: MCQ, chapterId: number, onNext: () => void, onPrev: () => void; currentIndex: number; totalCount: number; }) => {
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
+    const { isBookmarked, toggleBookmark } = useBookmarks();
+
 
     useEffect(() => {
         setSelectedAnswer(null);
@@ -120,9 +177,14 @@ const McqWidget = ({ mcq, chapterId, onNext, onPrev, currentIndex, totalCount }:
     return (
         <Card className="bg-card h-full flex flex-col">
             <CardHeader>
-                <CardTitle className="font-headline text-md">
-                    From <Link href={`/chapter/${chapterId}`} className="font-bold underline">Chapter {chapterId}</Link>: {mcq.question}
-                </CardTitle>
+                <div className="flex justify-between items-start gap-4">
+                  <CardTitle className="font-headline text-md">
+                      From <Link href={`/chapter/${chapterId}`} className="font-bold underline">Chapter {chapterId}</Link>: {mcq.question}
+                  </CardTitle>
+                   <Button variant="ghost" size="icon" onClick={() => toggleBookmark('mcq', chapterId, mcq)} title="Bookmark question" className="flex-shrink-0">
+                      <Bookmark className={cn("w-5 h-5", isBookmarked('mcq', chapterId, mcq) ? 'text-yellow-500 fill-yellow-400' : 'text-muted-foreground')} />
+                   </Button>
+                </div>
             </CardHeader>
             <CardContent className="flex-grow">
                 <RadioGroup
