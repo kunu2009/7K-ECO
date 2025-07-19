@@ -1,12 +1,13 @@
+import { streamText } from 'ai';
 import { chat } from '@/ai/flows/study-buddy-flow';
-import { StreamingTextResponse } from 'ai';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  const { stream } = await chat(messages, messages[messages.length - 1].content);
+  const result = await streamText(chat(messages));
 
-  return new StreamingTextResponse(stream);
+  return result.toAIStreamResponse();
 }

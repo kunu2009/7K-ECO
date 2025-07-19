@@ -3,7 +3,6 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import AppSidebar from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import StudyBuddyWidget from "@/components/StudyBuddyWidget";
 
 export const metadata: Metadata = {
   title: "7K Eco",
@@ -29,7 +28,7 @@ export default function RootLayout({
         <SidebarProvider>
           <div className="flex">
             <AppSidebar />
-            <main className="flex-1">
+            <main className="flex-1 md:h-screen md:overflow-y-auto">
               <div className="md:hidden p-4 border-b">
                  <SidebarTrigger />
               </div>
@@ -37,7 +36,6 @@ export default function RootLayout({
             </main>
           </div>
         </SidebarProvider>
-        <StudyBuddyWidget />
         <Toaster />
       </body>
     </html>

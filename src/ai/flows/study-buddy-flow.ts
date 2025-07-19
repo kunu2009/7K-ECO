@@ -4,23 +4,12 @@
  *
  * - chat - A function that handles a streaming chat conversation.
  */
-import {ai} from '@/ai/genkit';
-import {z} from 'zod';
-import {GenerateRequest} from 'genkit/generate';
+import { generateText, CoreMessage } from 'ai';
+import { google } from '@ai-sdk/google';
 
-const StudyBuddyRequestSchema = z.object({
-  history: z.array(z.any()),
-  message: z.string(),
-});
-
-export async function chat(
-  history: GenerateRequest['history'],
-  message: string
-) {
-  return await ai.generate({
-    history,
-    prompt: message,
-    stream: true,
+export function chat(messages: CoreMessage[]) {
+  return {
+    model: google('models/gemini-1.5-flash-latest'),
     system: `You are a friendly and encouraging study buddy for a 12th-grade student in India studying economics from the Maharashtra board textbook. Your name is 'Eco'.
 
     Your personality is:
@@ -31,5 +20,6 @@ export async function chat(
     - You should never give away direct answers to test questions but guide the student towards learning the concept.
     - If asked a question outside the scope of 12th-grade economics, politely decline and steer the conversation back to studying.
     - Keep your responses concise and easy to read.`,
-  });
+    messages,
+  };
 }
