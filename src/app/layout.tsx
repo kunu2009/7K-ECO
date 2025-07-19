@@ -6,7 +6,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import StudyBuddyWidget from "@/components/StudyBuddyWidget";
 
 export const metadata: Metadata = {
-  title: "EcoLearn",
+  title: "7K Eco",
   description: "Learn 12th grade economics with AI-powered tools.",
 };
 
