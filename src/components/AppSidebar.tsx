@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, Home, Timer, User, Bookmark, Search, Gamepad, Puzzle } from "lucide-react";
+import { BookOpen, Home, Timer, User, Bookmark, Search, Gamepad, Puzzle, Share2 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -89,6 +89,19 @@ export default function AppSidebar() {
             </SidebarMenuSub>
           </SidebarMenuItem>
           
+           <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={pathname === "/concept-web"}
+              tooltip={{ children: "Concept Web" }}
+            >
+              <Link href="/concept-web" onClick={handleLinkClick}>
+                <Share2 />
+                <span>Concept Web</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
