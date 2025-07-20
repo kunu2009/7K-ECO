@@ -28,16 +28,20 @@ type ChapterPageProps = {
   };
 };
 
+const getChapterData = (id: string) => {
+    const chapterId = parseInt(id, 10);
+    const chapter = chapters.find((c) => c.id === chapterId);
+    const materials = studyMaterials[chapterId];
+    if (!chapter || !materials) {
+        return notFound();
+    }
+    return { chapter, materials, chapterId };
+}
+
 export default function ChapterPage({ params }: ChapterPageProps) {
+  const { chapter, materials, chapterId } = getChapterData(params.id);
   const [activeTab, setActiveTab] = useState('summary');
-  const chapterId = parseInt(params.id, 10);
-  const chapter = chapters.find((c) => c.id === chapterId);
 
-  if (!chapter || !studyMaterials[chapterId]) {
-    notFound();
-  }
-
-  const materials = studyMaterials[chapterId];
   const isReelsActive = activeTab === 'reels';
   const showDemandChart = chapterId === 3;
   const showSupplyDemandChart = chapterId === 5;
