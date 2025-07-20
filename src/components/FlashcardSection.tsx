@@ -106,7 +106,7 @@ export default function FlashcardSection({ flashcards }: { flashcards: Flashcard
 
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className="w-full max-w-2xl mx-auto">
       <Carousel className="w-full" opts={{ loop: true }} setApi={setApi}>
         <CarouselContent>
           {flashcards.map((card, index) => (
