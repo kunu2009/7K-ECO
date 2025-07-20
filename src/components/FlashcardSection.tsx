@@ -115,8 +115,8 @@ export default function FlashcardSection({ flashcards }: { flashcards: Flashcard
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="hidden md:inline-flex"/>
+        <CarouselNext className="hidden md:inline-flex"/>
       </Carousel>
        <form onSubmit={handleJump} className="mt-4 flex gap-2 justify-center items-center">
             <Input
