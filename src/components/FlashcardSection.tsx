@@ -54,7 +54,7 @@ const FlashcardComponent = ({ card, onFlip }: { card: Flashcard, onFlip: () => v
             <MnemonicGenerator term={card.term} definition={card.definition} />
             <CardContent className="flex flex-col items-center justify-center p-6 h-full text-center">
               <p className="text-muted-foreground text-sm mb-4">Term</p>
-              <h3 className="text-xl md:text-2xl font-bold font-headline text-accent-foreground">{card.term}</h3>
+              <h3 className="text-xl md:text-2xl font-bold font-headline text-accent-foreground break-words">{card.term}</h3>
             </CardContent>
           </Card>
         </div>
@@ -106,11 +106,11 @@ export default function FlashcardSection({ flashcards }: { flashcards: Flashcard
 
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className="w-full">
       <Carousel className="w-full" opts={{ loop: true }} setApi={setApi}>
-        <CarouselContent>
+        <CarouselContent className="-ml-4">
           {flashcards.map((card, index) => (
-            <CarouselItem key={index}>
+            <CarouselItem key={index} className="pl-4">
               <FlashcardComponent card={card} onFlip={() => {}}/>
             </CarouselItem>
           ))}
