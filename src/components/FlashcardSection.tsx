@@ -44,7 +44,7 @@ const FlashcardComponent = ({ card, onFlip }: { card: Flashcard, onFlip: () => v
   return (
     <div className="p-1 perspective" onClick={handleFlip}>
       <motion.div
-        className="relative h-80 w-full cursor-pointer preserve-3d"
+        className="relative h-72 w-full cursor-pointer preserve-3d"
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6 }}
       >
@@ -54,7 +54,7 @@ const FlashcardComponent = ({ card, onFlip }: { card: Flashcard, onFlip: () => v
             <MnemonicGenerator term={card.term} definition={card.definition} />
             <CardContent className="flex flex-col items-center justify-center p-6 h-full text-center">
               <p className="text-muted-foreground text-sm mb-4">Term</p>
-              <h3 className="text-2xl font-bold font-headline text-accent-foreground">{card.term}</h3>
+              <h3 className="text-xl md:text-2xl font-bold font-headline text-accent-foreground">{card.term}</h3>
             </CardContent>
           </Card>
         </div>
@@ -64,7 +64,7 @@ const FlashcardComponent = ({ card, onFlip }: { card: Flashcard, onFlip: () => v
           <Card className="h-full bg-card border-border">
              <CardContent className="flex flex-col items-center justify-center p-6 h-full text-center">
               <p className="text-muted-foreground text-sm mb-4">Definition</p>
-              <p className="text-md font-code text-foreground">{card.definition}</p>
+              <p className="text-sm md:text-md font-code text-foreground">{card.definition}</p>
             </CardContent>
           </Card>
         </div>
@@ -106,7 +106,7 @@ export default function FlashcardSection({ flashcards }: { flashcards: Flashcard
 
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-xl mx-auto">
       <Carousel className="w-full" opts={{ loop: true }} setApi={setApi}>
         <CarouselContent>
           {flashcards.map((card, index) => (
