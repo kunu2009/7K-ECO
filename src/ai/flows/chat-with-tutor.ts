@@ -13,7 +13,7 @@ import {chapters} from '@/data/chapters';
 const chapterContext = chapters.map(c => `Chapter ${c.id} (${c.title}): ${c.description}`).join('\n');
 
 
-export function chatWithTutor(history: Message[]): ReadableStream<Uint8Array> {
+export async function chatWithTutor(history: Message[]): Promise<ReadableStream<Uint8Array>> {
   const { stream } = ai.generate({
     model: 'googleai/gemini-1.5-flash',
     history,
