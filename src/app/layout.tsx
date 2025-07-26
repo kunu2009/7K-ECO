@@ -7,6 +7,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 export const metadata: Metadata = {
   title: "7K Eco",
   description: "Learn 12th grade economics with AI-powered tools.",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -23,6 +24,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Source+Code+Pro:wght@400;700&display=swap"
           rel="stylesheet"
         />
+        <meta name="theme-color" content="#FFC107" />
       </head>
       <body className="font-body antialiased bg-background">
         <SidebarProvider>
