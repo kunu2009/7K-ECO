@@ -11,13 +11,13 @@ import {z} from 'zod';
 import {generate} from 'genkit/generate';
 import {Message, Role} from 'genkit/ai';
 import {chapters} from '@/data/chapters';
-import {streamText} from 'ai';
+import {toAIStream} from 'ai';
 
 const chapterContext = chapters.map(c => `Chapter ${c.id} (${c.title}): ${c.description}`).join('\n');
 
 
 export async function chatWithTutor(history: Message[]) {
-  const stream = await generate({
+  const llmResponse = await generate({
     model: 'googleai/gemini-1.5-flash',
     history,
     prompt: `You are an expert and friendly economics tutor for a 12th-grade student in India. 
@@ -31,13 +31,5 @@ export async function chatWithTutor(history: Message[]) {
     streaming: true,
   });
 
-  const textStream = stream.stream.pipeThrough(
-    new TransformStream<any, string>({
-        transform(chunk, controller) {
-            controller.enqueue(chunk.content[0].text);
-        }
-    })
-  )
-
-  return {stream: textStream}
+  return llmResponse.stream;
 }

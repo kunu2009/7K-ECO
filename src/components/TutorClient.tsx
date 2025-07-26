@@ -17,7 +17,7 @@ export default function TutorClient() {
   const { chatWithTutor } = useActions<typeof actions>();
   const [history, setHistory] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [streamingMessage, setStreamingMessage] = useStreamableValue();
+  const [data, setData, ] = useStreamableValue<any>();
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,11 +28,13 @@ export default function TutorClient() {
     setInput('');
 
     const { stream } = await chatWithTutor(newHistory);
-
-    for await (const chunk of stream) {
-        setStreamingMessage(chunk);
+    
+    for await (const delta of stream) {
+        setData(JSON.parse(delta));
     }
   };
+
+  const streamingMessage = data?.content;
 
   const allMessages = [...history];
   if(streamingMessage) {

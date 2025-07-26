@@ -2,18 +2,28 @@
 'use server';
 
 import { chatWithTutor } from '@/ai/flows/chat-with-tutor';
-import { createStreamableValue } from 'ai/rsc';
+import { createStreamableValue, render } from 'ai/rsc';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import { toAIStream } from 'ai';
 
 export const actions = {
     chatWithTutor: async (history: any) => {
         const stream = createStreamableValue();
         (async () => {
-          const {stream: resultStream} = await chatWithTutor(history);
-          for await (const chunk of resultStream) {
-            stream.update(chunk);
-          }
-          stream.done();
+            const llmStream = await chatWithTutor(history);
+            const aiStream = toAIStream(llmStream, {
+                async onFinal(completion) {
+                    stream.done();
+                },
+            });
+            render({
+                stream: aiStream,
+                schema: {},
+                messages: <ReactMarkdown>{aiStream.value}</ReactMarkdown>
+            });
+            stream.update(aiStream.value);
         })();
+        
         return { stream: stream.value };
     }
 };
