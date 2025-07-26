@@ -39,7 +39,7 @@ export default function AppSidebar() {
   }
 
   return (
-    <Sidebar className="border-r" side="left" collapsible="icon">
+    <Sidebar className="border-l" side="right" collapsible="icon">
        <SidebarHeader className="p-4 flex items-center justify-between">
          <Link href="/" className="font-bold text-2xl text-primary font-headline" onClick={handleLinkClick}><GraduationCap /></Link>
          <div className="hidden md:block">
