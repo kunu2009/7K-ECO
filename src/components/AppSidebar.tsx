@@ -47,12 +47,12 @@ export default function AppSidebar() {
          </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
-        <div className="p-2">
-          <form onSubmit={handleSearch}>
-            <SidebarInput name="search" placeholder="Search..." icon={<Search />} />
-          </form>
-        </div>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <form onSubmit={handleSearch}>
+              <SidebarInput name="search" placeholder="Search..." icon={<Search />} />
+            </form>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
