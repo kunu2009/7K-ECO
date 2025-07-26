@@ -17,7 +17,8 @@ import McqSection from '@/components/McqSection';
 import MustKnowSection from '@/components/MustKnowSection';
 import ReelsSection from '@/components/ReelsSection';
 import { FileText, Layers, ListChecks, Star, PlayCircle, BarChart2 } from 'lucide-react';
-import { studyMaterials } from '@/data/study-materials';
+import { studyMaterials, type StudyMaterials } from '@/data/study-materials';
+import { type Chapter } from '@/data/chapters';
 import { cn } from '@/lib/utils';
 import InteractiveSupplyDemandChart from '@/components/InteractiveSupplyDemandChart';
 import InteractiveDemandChart from '@/components/InteractiveDemandChart';
@@ -38,15 +39,14 @@ const getChapterData = (id: string) => {
     return { chapter, materials, chapterId };
 }
 
-export default function ChapterPage({ params }: ChapterPageProps) {
-  const { chapter, materials, chapterId } = getChapterData(params.id);
+// This is a client component, but we can pass server-fetched data to it.
+function ChapterClientComponent({ chapter, materials, chapterId }: { chapter: Chapter, materials: StudyMaterials, chapterId: number }) {
   const [activeTab, setActiveTab] = useState('summary');
 
   const isReelsActive = activeTab === 'reels';
   const showDemandChart = chapterId === 3;
   const showSupplyDemandChart = chapterId === 5;
   const showInteractiveChart = showDemandChart || showSupplyDemandChart;
-
 
   return (
     <div className={cn("min-h-screen bg-background", !isReelsActive && "p-4 md:p-8")}>
@@ -96,4 +96,13 @@ export default function ChapterPage({ params }: ChapterPageProps) {
       </main>
     </div>
   );
+}
+
+
+export default function ChapterPage({ params }: ChapterPageProps) {
+  // Data fetching happens here, on the server, before the client component renders.
+  const { chapter, materials, chapterId } = getChapterData(params.id);
+
+  // We then pass the resolved data as props to the client component.
+  return <ChapterClientComponent chapter={chapter} materials={materials} chapterId={chapterId} />;
 }
