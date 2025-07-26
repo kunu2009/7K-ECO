@@ -44,7 +44,7 @@ const FlashcardComponent = ({ card, onFlip }: { card: Flashcard, onFlip: () => v
   return (
     <div className="perspective h-full" onClick={handleFlip}>
       <motion.div
-        className="relative h-72 w-full cursor-pointer preserve-3d"
+        className="relative h-80 w-full cursor-pointer preserve-3d"
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6 }}
       >
@@ -106,8 +106,8 @@ export default function FlashcardSection({ flashcards }: { flashcards: Flashcard
 
 
   return (
-    <div className="w-full">
-      <Carousel className="w-full max-w-lg mx-auto" opts={{ loop: true }} setApi={setApi}>
+    <div className="w-full p-4 md:p-6">
+      <Carousel className="w-full max-w-xl mx-auto" opts={{ loop: true }} setApi={setApi}>
         <CarouselContent>
           {flashcards.map((card, index) => (
             <CarouselItem key={index}>
