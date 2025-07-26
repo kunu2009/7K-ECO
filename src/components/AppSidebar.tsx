@@ -15,9 +15,9 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
   useSidebar,
-  SidebarInput,
   SidebarTrigger
 } from "@/components/ui/sidebar";
+import { Input } from "@/components/ui/input";
 import { chapters } from "@/data/chapters";
 
 export default function AppSidebar() {
@@ -49,8 +49,19 @@ export default function AppSidebar() {
       <SidebarContent className="p-2">
         <SidebarMenu>
           <SidebarMenuItem>
-            <form onSubmit={handleSearch}>
-              <SidebarInput name="search" placeholder="Search..." icon={<Search />} />
+            <form onSubmit={handleSearch} className="relative">
+              <SidebarMenuButton asChild className="p-0 h-8 [&>svg]:hidden [&>span]:hidden" tooltip={{ children: "Search" }}>
+                  <label htmlFor="search-input">
+                      <Search />
+                      <span className="sr-only">Search</span>
+                  </label>
+              </SidebarMenuButton>
+              <Input
+                id="search-input"
+                name="search"
+                placeholder="Search..."
+                className="absolute inset-0 h-full w-full bg-sidebar-accent/50 group-data-[collapsible=icon]:hidden pl-8 placeholder:text-muted-foreground/80"
+              />
             </form>
           </SidebarMenuItem>
           <SidebarMenuItem>
