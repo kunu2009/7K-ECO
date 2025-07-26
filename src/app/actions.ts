@@ -1,8 +1,22 @@
 
-"use server";
+'use server';
 
-// This file is no longer needed as we are using pre-researched data.
-// It can be deleted, but we will keep it empty to avoid breaking any potential imports
-// that might be cleaned up later.
+import { ai } from '@/ai/genkit';
+import { chatWithTutor } from '@/ai/flows/chat-with-tutor';
+import { streamableValue } from 'ai/rsc';
 
-export {};
+export const getAIActions = () => {
+    return {
+        chatWithTutor: async (history: any) => {
+            const stream = streamableValue();
+            (async () => {
+              const resultStream = await chatWithTutor(history);
+              for await (const chunk of resultStream) {
+                stream.update(chunk);
+              }
+              stream.done();
+            })();
+            return { stream: stream.value };
+        }
+    }
+}

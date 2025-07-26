@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, Home, Timer, User, Bookmark, Search, Gamepad, Puzzle, Share2, Camera, GraduationCap } from "lucide-react";
+import { BookOpen, Home, Timer, User, Bookmark, Search, Gamepad, Puzzle, Share2, Camera, GraduationCap, MessageSquare } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -152,6 +152,19 @@ export default function AppSidebar() {
                 <Link href="/trivia" onClick={handleLinkClick}>
                     <Puzzle />
                     <span>Trivia Challenge</span>
+                </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem>
+                <SidebarMenuButton
+                asChild
+                isActive={pathname === "/tutor"}
+                tooltip={{ children: "AI Tutor" }}
+                >
+                <Link href="/tutor" onClick={handleLinkClick}>
+                    <MessageSquare />
+                    <span>AI Tutor</span>
                 </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
