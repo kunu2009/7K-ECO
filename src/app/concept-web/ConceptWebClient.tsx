@@ -48,11 +48,13 @@ export default function ConceptWebClient() {
     const posMap = new Map(nodePositions.map(p => [p.id, p]));
 
     const relatedNodes = hoveredNode ? connections[hoveredNode] || [] : [];
+    
+    const containerSize = isMobile ? 400 : 700;
 
     return (
         <div className="w-full h-[600px] md:h-[700px] flex items-center justify-center relative">
-            <motion.div
-                className="absolute text-center"
+             <motion.div
+                className="absolute text-center z-10"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
@@ -64,8 +66,8 @@ export default function ConceptWebClient() {
                  <p className="text-xs md:text-sm text-muted-foreground">Hover over a chapter</p>
             </motion.div>
 
-            <svg className="w-full h-full absolute top-0 left-0" viewBox={isMobile ? "-200 -200 400 400" : "-350 -350 700 700"}>
-                <g>
+            <svg className="w-full h-full absolute top-0 left-0" viewBox={`0 0 ${containerSize} ${containerSize}`}>
+                <g transform={`translate(${containerSize/2}, ${containerSize/2})`}>
                     {hoveredNode && posMap.has(hoveredNode) && relatedNodes.map(relatedId => {
                         const start = posMap.get(hoveredNode);
                         const end = posMap.get(relatedId);
@@ -99,9 +101,7 @@ export default function ConceptWebClient() {
                             style={{
                                 top: '50%',
                                 left: '50%',
-                                x: '-50%',
-                                y: '-50%',
-                                transform: `translate(${pos.x}px, ${pos.y}px)`,
+                                transform: `translate(-50%, -50%) translate(${pos.x}px, ${pos.y}px)`,
                             }}
                             onMouseEnter={() => setHoveredNode(pos.id)}
                             onMouseLeave={() => setHoveredNode(null)}
