@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { chapters } from '@/data/chapters';
 import { connections } from '@/data/connections';
 import { motion } from 'framer-motion';
@@ -37,12 +37,12 @@ export default function ConceptWebClient() {
     const [hoveredNode, setHoveredNode] = useState<number | null>(null);
     const [isMobile, setIsMobile] = useState(false);
 
-    useState(() => {
+    useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 768);
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
-    });
+    }, []);
     
     const nodePositions = calculatePositions(isMobile);
     const posMap = new Map(nodePositions.map(p => [p.id, p]));
