@@ -13,8 +13,8 @@ import {chapters} from '@/data/chapters';
 const chapterContext = chapters.map(c => `Chapter ${c.id} (${c.title}): ${c.description}`).join('\n');
 
 
-export async function chatWithTutor(history: Message[]): Promise<ReadableStream<Uint8Array>> {
-  const { stream } = await ai.generate({
+export function chatWithTutor(history: Message[]): ReadableStream<Uint8Array> {
+  const { stream } = ai.generate({
     model: 'googleai/gemini-1.5-flash',
     history,
     prompt: `You are an expert and friendly economics tutor for a 12th-grade student in India. 
