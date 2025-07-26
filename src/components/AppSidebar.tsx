@@ -15,7 +15,8 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
   useSidebar,
-  SidebarInput
+  SidebarInput,
+  SidebarTrigger
 } from "@/components/ui/sidebar";
 import { chapters } from "@/data/chapters";
 
@@ -39,8 +40,11 @@ export default function AppSidebar() {
 
   return (
     <Sidebar className="border-r" side="left" collapsible="icon">
-      <SidebarHeader className="p-4 justify-center">
+       <SidebarHeader className="p-4 flex items-center justify-between">
          <Link href="/" className="font-bold text-2xl text-primary font-headline" onClick={handleLinkClick}><GraduationCap /></Link>
+         <div className="hidden md:block">
+            <SidebarTrigger />
+         </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
         <div className="p-2">
@@ -105,7 +109,7 @@ export default function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              isActive={pathname === "/mock-test"}
+              isActive={pathname.startsWith("/mock-test")}
               tooltip={{ children: "Mock Test" }}
             >
               <Link href="/mock-test" onClick={handleLinkClick}>
