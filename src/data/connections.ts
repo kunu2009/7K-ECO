@@ -5,7 +5,7 @@ export const connections: Record<number, number[]> = {
     2: [1, 3, 4], // Utility Analysis -> Intro, Demand, Elasticity
     3: [2, 4, 5, 6], // Demand -> Utility, Elasticity, Supply, Markets
     4: [2, 3, 5], // Elasticity -> Utility, Demand, Supply
-    5: [3, 4, 6], // Supply -> Demand, Elasticity, Markets
+    5: [3, 4, 6],    // Supply -> Demand, Elasticity, Markets
     6: [3, 5],    // Markets -> Demand, Supply
     7: [8, 9],    // Index Numbers -> National Income, Public Finance
     8: [1, 7, 9], // National Income -> Intro, Index Numbers, Public Finance
