@@ -25,17 +25,19 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <meta name="theme-color" content="#FFC107" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
       <body className="font-body antialiased bg-background">
         <SidebarProvider>
           <div className="flex">
-            <AppSidebar />
             <main className="flex-1 md:h-screen md:overflow-y-auto">
               <div className="md:hidden p-4 border-b">
                  <SidebarTrigger />
               </div>
               {children}
             </main>
+            <AppSidebar />
           </div>
         </SidebarProvider>
         <Toaster />
