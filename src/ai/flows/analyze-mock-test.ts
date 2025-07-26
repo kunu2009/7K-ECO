@@ -30,6 +30,7 @@ export async function analyzeMockTest(input: AnalyzeTestInput): Promise<AnalyzeT
 
 const prompt = ai.definePrompt({
   name: 'mockTestAnalyzerPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: {schema: AnalyzeTestInputSchema},
   output: {schema: AnalyzeTestOutputSchema},
   prompt: `You are an expert and encouraging economics tutor. A student has just completed a mock test.
