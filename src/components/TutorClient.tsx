@@ -1,107 +1,114 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { Message } from 'genkit/ai';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Avatar, AvatarFallback } from './ui/avatar';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Send, User, Bot, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
 import { chatWithTutor } from '@/ai/flows/chat-with-tutor';
-
+import { ScrollArea } from './ui/scroll-area';
 
 export default function TutorClient() {
   const [history, setHistory] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [streamingResponse, setStreamingResponse] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTo({
+        top: scrollAreaRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [history, loading]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input) return;
+    if (!input || loading) return;
 
     setLoading(true);
-    setStreamingResponse("");
 
-    const newHistory: Message[] = [...history, { role: 'user', content: [{ text: input }] }];
+    const userMessage: Message = { role: 'user', content: [{ text: input }] };
+    const newHistory = [...history, userMessage];
     setHistory(newHistory);
-    const userInput = input;
     setInput('');
 
+    // Add a placeholder for the streaming AI response
+    setHistory(prev => [...prev, { role: 'model', content: [{ text: '' }] }]);
+
     try {
-        const stream = await chatWithTutor(newHistory);
-        const reader = stream.getReader();
-        const decoder = new TextDecoder();
-        let fullResponse = "";
+      const stream = await chatWithTutor(newHistory);
+      const reader = stream.getReader();
+      const decoder = new TextDecoder();
+      let fullResponse = "";
 
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-                break;
-            }
-            const chunk = decoder.decode(value, { stream: true });
-            fullResponse += chunk;
-            setStreamingResponse(fullResponse);
-        }
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
         
-        setHistory(prev => [...prev, {role: 'model', content: [{text: fullResponse}]}]);
-
+        fullResponse += decoder.decode(value, { stream: true });
+        
+        setHistory(prev => {
+            const updatedHistory = [...prev];
+            updatedHistory[updatedHistory.length - 1] = { role: 'model', content: [{ text: fullResponse }]};
+            return updatedHistory;
+        });
+      }
     } catch (error) {
-        console.error("Failed to get response from AI tutor", error);
+      console.error("Failed to get response from AI tutor", error);
+       setHistory(prev => {
+            const updatedHistory = [...prev];
+            updatedHistory[updatedHistory.length - 1] = { role: 'model', content: [{ text: 'Sorry, I encountered an error. Please try again.' }]};
+            return updatedHistory;
+        });
     } finally {
-        setStreamingResponse(null);
-        setLoading(false);
+      setLoading(false);
     }
   };
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col h-full">
-        <div className="flex-1 overflow-y-auto pr-4 space-y-6">
-            {history.map((msg, index) => (
-                <div key={index} className={cn("flex items-start gap-4", msg.role === 'user' ? "justify-end" : "justify-start")}>
-                    {msg.role === 'model' && (
-                        <Avatar className="w-8 h-8">
-                            <AvatarFallback><Bot/></AvatarFallback>
-                        </Avatar>
-                    )}
-                    <div className={cn("max-w-md p-3 rounded-lg", msg.role === 'user' ? "bg-primary text-primary-foreground" : "bg-muted")}>
-                        <ReactMarkdown className="prose dark:prose-invert text-sm break-words">
-                          {msg.content[0].text}
-                        </ReactMarkdown>
-                    </div>
-                     {msg.role === 'user' && (
-                        <Avatar className="w-8 h-8">
-                           <AvatarFallback><User/></AvatarFallback>
-                        </Avatar>
-                    )}
-                </div>
-            ))}
-             {loading && (
-                 <div className="flex items-start gap-4 justify-start">
-                    <Avatar className="w-8 h-8">
-                        <AvatarFallback><Bot/></AvatarFallback>
-                    </Avatar>
-                    <div className={cn("max-w-md p-3 rounded-lg bg-muted")}>
-                        {streamingResponse !== null ? (
-                             <ReactMarkdown className="prose dark:prose-invert text-sm break-words">
-                                {streamingResponse}
-                            </ReactMarkdown>
-                        ) : (
-                             <div className="flex items-center justify-center h-full">
+        <ScrollArea className="flex-1 pr-4" ref={scrollAreaRef as any}>
+            <div className="space-y-6">
+                {history.map((msg, index) => (
+                    <div key={index} className={cn("flex items-start gap-4", msg.role === 'user' ? "justify-end" : "justify-start")}>
+                        {msg.role === 'model' && (
+                            <Avatar className="w-8 h-8">
+                                <AvatarFallback><Bot/></AvatarFallback>
+                            </Avatar>
+                        )}
+                        <div className={cn("max-w-md p-3 rounded-lg", msg.role === 'user' ? "bg-primary text-primary-foreground" : "bg-muted")}>
+                            {msg.content[0].text ? (
+                                <ReactMarkdown className="prose dark:prose-invert text-sm break-words">
+                                    {msg.content[0].text}
+                                </ReactMarkdown>
+                            ) : (
                                 <Loader2 className="w-4 h-4 animate-spin"/>
-                             </div>
+                            )}
+                        </div>
+                        {msg.role === 'user' && (
+                            <Avatar className="w-8 h-8">
+                            <AvatarFallback><User/></AvatarFallback>
+                            </Avatar>
                         )}
                     </div>
-                </div>
-             )}
-             {history.length === 0 && !loading && (
-                <div className="text-center text-muted-foreground">
-                    <p>Start the conversation by asking a question about economics!</p>
-                </div>
-             )}
-        </div>
+                ))}
+                {history.length === 0 && !loading && (
+                    <div className="text-center text-muted-foreground">
+                        <p>Start the conversation by asking a question about economics!</p>
+                    </div>
+                )}
+            </div>
+        </ScrollArea>
         <form onSubmit={handleSendMessage} className="flex items-center gap-2 pt-4 sticky bottom-0 bg-background">
             <Input 
                 value={input}
@@ -111,7 +118,7 @@ export default function TutorClient() {
                 disabled={loading}
             />
             <Button type="submit" size="icon" disabled={!input || loading}>
-                <Send className="w-4 h-4" />
+                {loading ? <Loader2 className="w-4 h-4 animate-spin"/> : <Send className="w-4 h-4" />}
             </Button>
         </form>
     </div>
