@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, Home, Timer, User, Bookmark, Search, Gamepad, Puzzle, Share2, Camera } from "lucide-react";
+import { BookOpen, Home, Timer, User, Bookmark, Search, Gamepad, Puzzle, Share2, Camera, GraduationCap } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -40,7 +40,7 @@ export default function AppSidebar() {
   return (
     <Sidebar className="border-r" side="left" collapsible="icon">
       <SidebarHeader className="p-4 justify-center">
-         <Link href="/" className="font-bold text-2xl text-primary font-headline" onClick={handleLinkClick}>E</Link>
+         <Link href="/" className="font-bold text-2xl text-primary font-headline" onClick={handleLinkClick}><GraduationCap /></Link>
       </SidebarHeader>
       <SidebarContent className="p-2">
         <div className="p-2">
