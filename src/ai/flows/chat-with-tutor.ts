@@ -14,7 +14,7 @@ const chapterContext = chapters.map(c => `Chapter ${c.id} (${c.title}): ${c.desc
 
 
 export async function chatWithTutor(history: Message[]): Promise<ReadableStream<Uint8Array>> {
-  const llmResponse = await ai.generate({
+  const { stream } = ai.generate({
     model: 'googleai/gemini-1.5-flash',
     history,
     prompt: `You are an expert and friendly economics tutor for a 12th-grade student in India. 
@@ -29,7 +29,7 @@ export async function chatWithTutor(history: Message[]): Promise<ReadableStream<
     stream: true,
   });
 
-  const encodedStream = llmResponse.stream.pipeThrough(
+  const encodedStream = stream.pipeThrough(
     new TextEncoderStream()
   );
 
