@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from 'react';
-import { useActions, useStreamableValue } from 'ai/rsc';
 import type { Message } from 'genkit/ai';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Input } from './ui/input';
@@ -10,14 +9,13 @@ import { Button } from './ui/button';
 import { Send, User, Bot, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
-import type {actions} from '@/app/actions';
+import { chatWithTutor } from '@/ai/flows/chat-with-tutor';
 
 
 export default function TutorClient() {
-  const { chatWithTutor } = useActions<typeof actions>();
   const [history, setHistory] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [data, setData, ] = useStreamableValue<any>();
+  const [streamingResponse, setStreamingResponse] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -25,31 +23,43 @@ export default function TutorClient() {
     if (!input) return;
 
     setLoading(true);
+    setStreamingResponse("");
+
     const newHistory: Message[] = [...history, { role: 'user', content: [{ text: input }] }];
     setHistory(newHistory);
+    const userInput = input;
     setInput('');
 
-    const { stream } = await chatWithTutor(newHistory);
-    
-    let fullResponse = "";
-    for await (const delta of stream) {
-        const chunk = JSON.parse(delta);
-        if(chunk.content) {
-          fullResponse += chunk.content;
-          setData(fullResponse);
+    try {
+        const stream = await chatWithTutor(newHistory);
+        const reader = stream.getReader();
+        const decoder = new TextDecoder();
+        let fullResponse = "";
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) {
+                break;
+            }
+            const chunk = decoder.decode(value, { stream: true });
+            fullResponse += chunk;
+            setStreamingResponse(fullResponse);
         }
+        
+        setHistory(prev => [...prev, {role: 'model', content: [{text: fullResponse}]}]);
+
+    } catch (error) {
+        console.error("Failed to get response from AI tutor", error);
+    } finally {
+        setStreamingResponse(null);
+        setLoading(false);
     }
-    setHistory(prev => [...prev, {role: 'model', content: [{text: fullResponse}]}]);
-    setData(undefined);
-    setLoading(false);
   };
 
-  const allMessages = [...history];
-  
   return (
     <div className="max-w-2xl mx-auto flex flex-col h-full">
         <div className="flex-1 overflow-y-auto pr-4 space-y-6">
-            {allMessages.map((msg, index) => (
+            {history.map((msg, index) => (
                 <div key={index} className={cn("flex items-start gap-4", msg.role === 'user' ? "justify-end" : "justify-start")}>
                     {msg.role === 'model' && (
                         <Avatar className="w-8 h-8">
@@ -74,9 +84,9 @@ export default function TutorClient() {
                         <AvatarFallback><Bot/></AvatarFallback>
                     </Avatar>
                     <div className={cn("max-w-md p-3 rounded-lg bg-muted")}>
-                        {data ? (
+                        {streamingResponse !== null ? (
                              <ReactMarkdown className="prose dark:prose-invert text-sm break-words">
-                                {data}
+                                {streamingResponse}
                             </ReactMarkdown>
                         ) : (
                              <div className="flex items-center justify-center h-full">

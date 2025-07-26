@@ -7,29 +7,31 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'zod';
-import {generate} from 'genkit/generate';
-import {Message, Role} from 'genkit/ai';
+import { Message } from 'genkit/ai';
 import {chapters} from '@/data/chapters';
-import {toAIStream} from 'ai';
 
 const chapterContext = chapters.map(c => `Chapter ${c.id} (${c.title}): ${c.description}`).join('\n');
 
 
-export async function chatWithTutor(history: Message[]) {
-  const llmResponse = await generate({
+export async function chatWithTutor(history: Message[]): Promise<ReadableStream<Uint8Array>> {
+  const llmResponse = await ai.generate({
     model: 'googleai/gemini-1.5-flash',
     history,
     prompt: `You are an expert and friendly economics tutor for a 12th-grade student in India. 
     Your role is to answer their questions clearly and concisely.
     Use simple language and provide relatable examples when possible.
     If the user asks a question outside the scope of 12th-grade economics, gently guide them back to the topic.
+    Keep your answers focused and to the point.
     
     Here is the syllabus context to help you answer questions accurately:
     ${chapterContext}
     `,
-    streaming: true,
+    stream: true,
   });
 
-  return llmResponse.stream;
+  const encodedStream = llmResponse.stream.pipeThrough(
+    new TextEncoderStream()
+  );
+
+  return encodedStream;
 }
