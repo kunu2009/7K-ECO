@@ -10,10 +10,11 @@ import { Button } from './ui/button';
 import { Send, User, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
+import type {actions} from '@/app/actions';
 
 
 export default function TutorClient() {
-  const { chatWithTutor } = useActions();
+  const { chatWithTutor } = useActions<typeof actions>();
   const [history, setHistory] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [streamingMessage, setStreamingMessage] = useStreamableValue();
@@ -29,7 +30,7 @@ export default function TutorClient() {
     const { stream } = await chatWithTutor(newHistory);
 
     for await (const chunk of stream) {
-        setStreamingMessage(chunk.content[0].text);
+        setStreamingMessage(chunk);
     }
   };
 
