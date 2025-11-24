@@ -7,6 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Slider } from "@/components/ui/slider"
 import { Label as UiLabel } from "@/components/ui/label"
 
+type InteractiveDemandChartProps = {
+    title?: string;
+    description?: string;
+};
+
 const generateDemandData = () => {
     const data = [];
     // P = 11 - 0.1Q  => 10P = 110 - Q => Q = 110 - 10P
@@ -17,7 +22,10 @@ const generateDemandData = () => {
     return data;
 };
 
-export default function InteractiveDemandChart() {
+export default function InteractiveDemandChart({
+    title = "Interactive Demand Curve",
+    description = "Adjust the price slider to see how the quantity demanded changes. This illustrates the concepts of expansion and contraction of demand along the curve.",
+}: InteractiveDemandChartProps) {
     const [price, setPrice] = React.useState(6);
     const demandData = generateDemandData();
     // Q = 110 - 10P
@@ -26,10 +34,8 @@ export default function InteractiveDemandChart() {
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle>Interactive Demand Curve</CardTitle>
-                <CardDescription>
-                    Adjust the price slider to see how the quantity demanded changes. This illustrates the concepts of expansion and contraction of demand along the curve.
-                </CardDescription>
+                <CardTitle>{title}</CardTitle>
+                <CardDescription>{description}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
                 <div className="h-96 w-full">

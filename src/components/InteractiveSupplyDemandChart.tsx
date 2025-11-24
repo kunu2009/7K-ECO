@@ -7,6 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Slider } from "@/components/ui/slider"
 import { Label as UiLabel } from "@/components/ui/label"
 
+type InteractiveSupplyDemandChartProps = {
+    title?: string;
+    description?: string;
+};
+
 const generateData = (demandShift: number, supplyShift: number) => {
     const demandData = [];
     const supplyData = [];
@@ -37,7 +42,10 @@ const generateData = (demandShift: number, supplyShift: number) => {
     return { demandData, supplyData, equilibriumPrice, equilibriumQuantity };
 };
 
-export default function InteractiveSupplyDemandChart() {
+export default function InteractiveSupplyDemandChart({
+    title = "Interactive Supply & Demand",
+    description = "Adjust the sliders to see how changes in overall demand or supply affect the equilibrium price and quantity.",
+}: InteractiveSupplyDemandChartProps) {
     const [demandShift, setDemandShift] = React.useState(0);
     const [supplyShift, setSupplyShift] = React.useState(0);
 
@@ -46,10 +54,8 @@ export default function InteractiveSupplyDemandChart() {
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle>Interactive Supply & Demand</CardTitle>
-                <CardDescription>
-                    Adjust the sliders to see how changes in overall demand or supply affect the equilibrium price and quantity.
-                </CardDescription>
+                <CardTitle>{title}</CardTitle>
+                <CardDescription>{description}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
                 <div className="h-96 w-full">
