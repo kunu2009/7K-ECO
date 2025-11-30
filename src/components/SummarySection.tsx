@@ -72,12 +72,13 @@ export default function SummarySection({ summary }: { summary: string }) {
         toast({ title: "Note is empty", description: "Please write something in your note.", variant: "destructive"});
         return;
     };
+    const now = Date.now();
     const newNote: Note = {
-      id: `note-${Date.now()}`,
+      id: `note-${now}`,
       chapterId: chapterId,
       selection: selection.toString(),
       note: noteText,
-      timestamp: Date.now(),
+      timestamp: now,
     };
     const updatedNotes = [...notes, newNote];
     setNotes(updatedNotes);
@@ -157,7 +158,7 @@ export default function SummarySection({ summary }: { summary: string }) {
               <div className="space-y-2">
                 <h4 className="font-medium leading-none">Add Note</h4>
                 <p className="text-sm text-muted-foreground">
-                  Add a note to your selected text: <em className="font-bold">"{selection?.toString()}"</em>
+                  Add a note to your selected text: <em className="font-bold">&ldquo;{selection?.toString()}&rdquo;</em>
                 </p>
               </div>
               <div className="grid gap-2">

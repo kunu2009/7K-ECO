@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
+import { PT_Sans, Source_Code_Pro } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import AppSidebar from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+
+const ptSans = PT_Sans({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-pt-sans",
+});
+
+const sourceCodePro = Source_Code_Pro({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-source-code-pro",
+});
 
 export const metadata: Metadata = {
   title: "7K Eco",
@@ -16,14 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${ptSans.variable} ${sourceCodePro.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Source+Code+Pro:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
         <meta name="theme-color" content="#FFC107" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />

@@ -120,7 +120,7 @@ export default function PolicyGameClient() {
                     <CardHeader>
                         <CardTitle>Welcome, Finance Minister!</CardTitle>
                         <CardDescription>
-                            You have 5 years to manage the nation's economy. Your goal is to foster GDP growth while keeping inflation and public happiness in check. Make your policy decisions wisely each year.
+                            You have 5 years to manage the nation&apos;s economy. Your goal is to foster GDP growth while keeping inflation and public happiness in check. Make your policy decisions wisely each year.
                         </CardDescription>
                     </CardHeader>
                     <CardFooter>

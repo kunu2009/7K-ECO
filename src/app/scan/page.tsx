@@ -45,9 +45,10 @@ export default function ScanPage() {
 
     getCameraPermission();
 
+    const currentVideoRef = videoRef.current;
     return () => {
-        if (videoRef.current && videoRef.current.srcObject) {
-            const stream = videoRef.current.srcObject as MediaStream;
+        if (currentVideoRef && currentVideoRef.srcObject) {
+            const stream = currentVideoRef.srcObject as MediaStream;
             stream.getTracks().forEach(track => track.stop());
         }
     }

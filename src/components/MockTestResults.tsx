@@ -22,7 +22,7 @@ export default function MockTestResults({ score, totalMarks, aiFeedback, isGener
             <Card className="text-center">
                 <CardHeader>
                     <CardTitle className="text-3xl font-bold">Test Complete!</CardTitle>
-                    <CardDescription>Here's how you did.</CardDescription>
+                    <CardDescription>Here&apos;s how you did.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex items-center justify-center gap-4 text-6xl font-bold text-primary">
@@ -40,7 +40,7 @@ export default function MockTestResults({ score, totalMarks, aiFeedback, isGener
                         <Lightbulb className="text-primary"/>
                         AI-Powered Feedback
                     </CardTitle>
-                    <CardDescription>Here's a personalized study plan based on your results.</CardDescription>
+                    <CardDescription>Here&apos;s a personalized study plan based on your results.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {isGeneratingFeedback && (

@@ -52,7 +52,7 @@ export default function NoteTakingWidget() {
         <Card className="w-full">
             <CardHeader>
                 <CardTitle className="flex items-center"><BookOpen className="mr-3 text-primary"/> My Notes & Highlights</CardTitle>
-                <CardDescription>Review all the notes you've taken from the chapter summaries.</CardDescription>
+                <CardDescription>Review all the notes you&apos;ve taken from the chapter summaries.</CardDescription>
             </CardHeader>
             <CardContent>
                 {notes.length > 0 ? (
@@ -65,7 +65,7 @@ export default function NoteTakingWidget() {
                                             From <Link href={`/chapter/${note.chapterId}`} className="font-bold underline hover:text-primary">{getChapterTitle(note.chapterId)}</Link>
                                         </p>
                                         <blockquote className="mt-2 pl-4 border-l-4 border-primary/50 italic text-muted-foreground">
-                                            "{note.selection}"
+                                            &ldquo;{note.selection}&rdquo;
                                         </blockquote>
                                         <p className="mt-3 text-foreground font-semibold">{note.note}</p>
                                     </div>
@@ -78,8 +78,8 @@ export default function NoteTakingWidget() {
                     </div>
                 ) : (
                      <div className="flex flex-col items-center justify-center h-48 bg-muted/50 rounded-lg text-center p-4">
-                        <p className="text-muted-foreground font-semibold">You haven't added any notes yet.</p>
-                        <p className="text-sm text-muted-foreground mt-2">To get started, go to a chapter summary, select some text, and click 'Add Note'.</p>
+                        <p className="text-muted-foreground font-semibold">You haven&apos;t added any notes yet.</p>
+                        <p className="text-sm text-muted-foreground mt-2">To get started, go to a chapter summary, select some text, and click &lsquo;Add Note&rsquo;.</p>
                     </div>
                 )}
             </CardContent>

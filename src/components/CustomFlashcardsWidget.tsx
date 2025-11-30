@@ -173,7 +173,7 @@ export default function CustomFlashcardsWidget() {
                             </div>
                         ) : (
                             <div className="flex items-center justify-center h-64 bg-muted/50 rounded-lg">
-                                <p className="text-muted-foreground">You haven't created any cards yet.</p>
+                                <p className="text-muted-foreground">You haven&apos;t created any cards yet.</p>
                             </div>
                         )}
                     </div>

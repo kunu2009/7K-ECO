@@ -27,7 +27,7 @@ export default function InteractiveUtilityChart({
   description = "Move along the consumption scale to see how total utility rises and marginal utility eventually declines.",
 }: InteractiveUtilityChartProps) {
   const [quantity, setQuantity] = useState(4);
-  const data = useMemo(buildUtilityData, []);
+  const data = useMemo(() => buildUtilityData(), []);
   const currentPoint = data[quantity];
 
   return (

@@ -142,7 +142,7 @@ function SearchComponent() {
                 <div className="text-center bg-card p-8 rounded-lg">
                     <h3 className="text-2xl font-bold">No Results Found</h3>
                     <p className="text-muted-foreground mt-2">
-                        Could not find any content matching "{query}".
+                        Could not find any content matching &ldquo;{query}&rdquo;.
                     </p>
                 </div>
             )}
@@ -174,7 +174,7 @@ function SearchHeader() {
     return (
         <h1 className="font-headline text-3xl md:text-5xl font-bold text-primary flex items-center justify-center gap-4 flex-wrap">
             <SearchIcon className="w-8 h-8 md:w-10 md:h-10" />
-            <span>Search Results for "{query}"</span>
+            <span>Search Results for &ldquo;{query}&rdquo;</span>
         </h1>
     )
 }

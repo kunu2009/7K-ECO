@@ -41,6 +41,7 @@ export default function MockTestClient({ paper }: MockTestClientProps) {
             finishTest();
         }
         return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isTestRunning, timeLeft]);
 
     const formatTime = (seconds: number) => {
@@ -120,7 +121,7 @@ export default function MockTestClient({ paper }: MockTestClientProps) {
                     <CardTitle>{paper.title}</CardTitle>
                     <CardDescription>
                         This is a full-length mock paper designed to simulate exam conditions.
-                        You will have 3 hours to complete the paper. Click "Start Test" when you are ready.
+                        You will have 3 hours to complete the paper. Click &ldquo;Start Test&rdquo; when you are ready.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">

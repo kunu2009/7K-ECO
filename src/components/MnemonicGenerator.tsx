@@ -64,7 +64,7 @@ export default function MnemonicGenerator({ term, definition }: MnemonicGenerato
             </PopoverTrigger>
             <PopoverContent className="w-64 p-4" align="end">
                 <div className="space-y-2">
-                    <h4 className="font-medium leading-none text-primary">Mnemonic for "{term}"</h4>
+                    <h4 className="font-medium leading-none text-primary">Mnemonic for &ldquo;{term}&rdquo;</h4>
                     {isLoading && (
                          <div className="flex items-center justify-center h-16">
                             <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
@@ -72,7 +72,7 @@ export default function MnemonicGenerator({ term, definition }: MnemonicGenerato
                     )}
                     {mnemonic && (
                         <div>
-                             <p className="text-sm text-muted-foreground mt-2 italic">"{mnemonic}"</p>
+                             <p className="text-sm text-muted-foreground mt-2 italic">&ldquo;{mnemonic}&rdquo;</p>
                              <Button size="sm" variant="outline" className="mt-4 w-full" onClick={handleCopyToClipboard}>
                                 <Copy className="mr-2 h-4 w-4" /> Copy
                              </Button>

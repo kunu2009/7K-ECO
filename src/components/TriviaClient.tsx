@@ -110,7 +110,7 @@ export default function TriviaClient() {
              <Card className="max-w-2xl mx-auto text-center">
                 <CardHeader>
                     <CardTitle className="text-3xl font-bold">Round Complete!</CardTitle>
-                    <CardDescription>Here's how you did.</CardDescription>
+                    <CardDescription>Here&apos;s how you did.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex items-center justify-center gap-4 text-6xl font-bold text-primary">
