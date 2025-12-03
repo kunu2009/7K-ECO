@@ -950,9 +950,6 @@ export const studyMaterials: Record<number, StudyMaterials> = {
             { question: "In a balanced budget:", options: ["Revenue > Expenditure", "Expenditure > Revenue", "Revenue = Expenditure", "Revenue and Expenditure are zero"], answer: "Revenue = Expenditure" },
             { question: "Which deficit shows the borrowing needed to cover expenses other than interest payments?", options: ["Fiscal Deficit", "Revenue Deficit", "Primary Deficit", "Budget Deficit"], answer: "Primary Deficit" },
             { question: "A progressive tax system means:", options: ["Tax rate is the same for all", "The rich pay a higher percentage of their income in taxes", "The poor pay more taxes", "Everyone pays the same amount of tax"], answer: "The rich pay a higher percentage of their income in taxes" },
-            { term: "Special Assessment", definition: "A levy made by the government on properties that have gained value due to public improvements." },
-            { term: "Public Debt", definition: "Loans raised by the government from the public, banks, and foreign sources." },
-            { term: "Fiscal Policy", definition: "The use of government spending and taxation to influence the economy." },
         ],
         reels: [
             { title: "What is Public Finance?", content: "It's the economics of the government's wallet! It studies how the government collects money (revenue) and how it spends it (expenditure).", thumbnail: 'https://placehold.co/600x400', hint: 'government building' },
